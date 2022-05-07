@@ -41,7 +41,7 @@ CREATE TABLE "tbl_session" (
 CREATE TABLE "tbl_user" (
   "id" SERIAL PRIMARY KEY,
   "username" varchar(100) UNIQUE NOT NULL,
-  "password" varchar(100) UNIQUE NOT NULL
+  "password" varchar(100) NOT NULL
 );
 
 CREATE TABLE "tbl_authority" (
