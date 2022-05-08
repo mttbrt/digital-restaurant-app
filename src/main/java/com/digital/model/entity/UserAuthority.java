@@ -1,6 +1,6 @@
-package com.digital.model;
+package com.digital.model.entity;
 
-import com.digital.model.key.UserAuthorityPK;
+import com.digital.model.entity.pk.UserAuthorityPK;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

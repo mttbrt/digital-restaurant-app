@@ -1,4 +1,4 @@
-package com.digital.model;
+package com.digital.model.entity;
 
 import java.time.OffsetDateTime;
 import javax.persistence.Column;
@@ -9,27 +9,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_order")
-public class Order {
+@javax.persistence.Table(name = "tbl_session")
+public class Session {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
 
+  @Column(name = "token", nullable = false, length = 250)
+  private String token;
+
   @Column(name = "creation_ts", nullable = false)
   private OffsetDateTime creationTs;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "taken_by")
-  private User takenBy;
-
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "session_id", nullable = false)
-  private Session session;
+  @JoinColumn(name = "table_id", nullable = false)
+  private Table table;
 
   public Integer getId() {
     return id;
@@ -37,6 +35,14 @@ public class Order {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
   }
 
   public OffsetDateTime getCreationTs() {
@@ -47,20 +53,12 @@ public class Order {
     this.creationTs = creationTs;
   }
 
-  public User getTakenBy() {
-    return takenBy;
+  public Table getTable() {
+    return table;
   }
 
-  public void setTakenBy(User takenBy) {
-    this.takenBy = takenBy;
-  }
-
-  public Session getSession() {
-    return session;
-  }
-
-  public void setSession(Session session) {
-    this.session = session;
+  public void setTable(Table table) {
+    this.table = table;
   }
 
 }
