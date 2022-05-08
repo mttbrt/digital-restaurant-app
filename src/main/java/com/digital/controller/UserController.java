@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/")
 public class UserController {
 
-    private UserRepository userRepository;
+  private UserRepository userRepository;
 
-    @Autowired
-    public void setEmployeeController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public void setEmployeeController(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+  @GetMapping("/users")
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
 
 }
