@@ -1,23 +1,22 @@
-package com.digital.model;
+package com.digital.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_authority")
-public class Authority {
+@javax.persistence.Table(name = "tbl_table")
+public class Table {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
+  @Column(name = "code", nullable = false, length = 100)
+  private String code;
 
   public Integer getId() {
     return id;
@@ -27,12 +26,12 @@ public class Authority {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getCode() {
+    return code;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCode(String code) {
+    this.code = code;
   }
 
 }

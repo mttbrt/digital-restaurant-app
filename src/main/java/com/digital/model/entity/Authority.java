@@ -1,4 +1,4 @@
-package com.digital.model;
+package com.digital.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,16 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_state")
-public class State {
+@Table(name = "tbl_authority")
+public class Authority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "title", nullable = false, length = 100)
-  private String title;
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
 
   public Integer getId() {
     return id;
@@ -27,12 +27,12 @@ public class State {
     this.id = id;
   }
 
-  public String getTitle() {
-    return title;
+  public String getName() {
+    return name;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setName(String name) {
+    this.name = name;
   }
 
 }

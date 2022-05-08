@@ -1,4 +1,4 @@
-package com.digital.model.key;
+package com.digital.model.entity.pk;
 
 import java.io.Serializable;
 import java.util.Objects;

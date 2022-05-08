@@ -1,6 +1,6 @@
-package com.digital.model;
+package com.digital.model.entity;
 
-import com.digital.model.key.ItemWithinOrderPK;
+import com.digital.model.entity.pk.ItemWithinOrderPK;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
