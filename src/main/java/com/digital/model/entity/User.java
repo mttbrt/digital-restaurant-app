@@ -1,10 +1,17 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +28,22 @@ public class User {
 
   @Column(name = "password", nullable = false, length = 100)
   private String password;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "takenBy")
+  private Set<Order> orders;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "fulfilledBy")
+  private Set<ItemWithinOrder> itemsWithinOrder;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "tbl_user_authority",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "authority_id"))
+  private Set<Icon> authorities;
 
   public Integer getId() {
     return id;
@@ -46,4 +69,27 @@ public class User {
     this.password = password;
   }
 
+  public Set<Order> getOrders() {
+    return orders;
+  }
+
+  public void setOrders(Set<Order> orders) {
+    this.orders = orders;
+  }
+
+  public Set<Icon> getAuthorities() {
+    return authorities;
+  }
+
+  public void setAuthorities(Set<Icon> authorities) {
+    this.authorities = authorities;
+  }
+
+  public Set<ItemWithinOrder> getItemsWithinOrder() {
+    return itemsWithinOrder;
+  }
+
+  public void setItemsWithinOrder(Set<ItemWithinOrder> itemsWithinOrder) {
+    this.itemsWithinOrder = itemsWithinOrder;
+  }
 }

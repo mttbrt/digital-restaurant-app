@@ -1,10 +1,14 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,10 @@ public class Authority {
 
   @Column(name = "name", nullable = false, length = 100)
   private String name;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authorities")
+  private Set<User> users;
 
   public Integer getId() {
     return id;
@@ -35,4 +43,11 @@ public class Authority {
     this.name = name;
   }
 
+  public Set<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(Set<User> users) {
+    this.users = users;
+  }
 }
