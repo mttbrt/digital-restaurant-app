@@ -21,6 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
       .authorizeRequests()
         .antMatchers("/api/v1/home").permitAll()
+        .antMatchers("/api/v1/users").hasAnyRole("STAFF", "ADMIN")
+        .antMatchers("/api/v1/admin").hasRole("ADMIN")
         .anyRequest().authenticated()
         .and()
       .formLogin()
@@ -28,24 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .logout()
         .and()
       .httpBasic();
-  }
-
-  @Bean
-  @Override
-  public UserDetailsService userDetailsService() {
-    UserDetails user =
-        User.withDefaultPasswordEncoder()
-            .username("user")
-            .password(passwordEncoder().encode("password"))
-            .roles("USER")
-            .build();
-
-    return new InMemoryUserDetailsManager(user);
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 
 }

@@ -21,9 +21,19 @@ public class UserController {
     this.userRepository = userRepository;
   }
 
+  @GetMapping("/home")
+  public String getHome() {
+    return "Home";
+  }
+
   @GetMapping("/users")
   public List<User> getAllUsers() {
     return userRepository.findAll();
+  }
+
+  @GetMapping("/admin")
+  public String getAdminPanel() {
+    return "Admin panel";
   }
 
 }
