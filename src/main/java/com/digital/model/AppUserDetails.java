@@ -3,6 +3,7 @@ package com.digital.model;
 import com.digital.model.entity.User;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,16 +11,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AppUserDetails implements UserDetails {
 
   private final User user;
-  private final List<SimpleGrantedAuthority> grantedAuthorities;
 
-  public AppUserDetails(User user, List<SimpleGrantedAuthority> grantedAuthorities) {
+  public AppUserDetails(User user) {
     this.user = user;
-    this.grantedAuthorities = grantedAuthorities;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return grantedAuthorities;
+    return user.getAuthorities()
+        .stream()
+        .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+        .collect(Collectors.toList());
   }
 
   @Override

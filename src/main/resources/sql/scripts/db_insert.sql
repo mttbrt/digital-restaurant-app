@@ -23,8 +23,8 @@ INSERT INTO public.tbl_table (code) VALUES ('T2');
 INSERT INTO public.tbl_session ("token","table_id") VALUES ('63382b13-2e52-48c8-a3e7-e65af490f871',1);
 INSERT INTO public.tbl_session ("token","table_id") VALUES ('8e30a016-d186-4d28-a9fd-63baa781c9e4',2);
 
-INSERT INTO public.tbl_user ("username","password") VALUES ('admin','password');
-INSERT INTO public.tbl_user ("username","password") VALUES ('user','password');
+INSERT INTO public.tbl_user ("username","password") VALUES ('admin','{noop}password');
+INSERT INTO public.tbl_user ("username","password") VALUES ('user','{noop}password');
 
 INSERT INTO public.tbl_authority ("name") VALUES ('ROLE_ADMIN');
 INSERT INTO public.tbl_authority ("name") VALUES ('ROLE_STAFF');

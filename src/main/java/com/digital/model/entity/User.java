@@ -38,7 +38,7 @@ public class User {
   private Set<ItemWithinOrder> itemsWithinOrder;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "tbl_user_authority",
       joinColumns = @JoinColumn(name = "user_id"),
