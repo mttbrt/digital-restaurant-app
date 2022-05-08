@@ -1,10 +1,14 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +28,10 @@ public class Icon {
 
   @Column(name = "image", nullable = false, length = 200)
   private String image;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "icons")
+  private Set<Item> items;
 
   public Integer getId() {
     return id;
@@ -57,4 +65,11 @@ public class Icon {
     this.image = image;
   }
 
+  public Set<Item> getItems() {
+    return items;
+  }
+
+  public void setItems(Set<Item> items) {
+    this.items = items;
+  }
 }
