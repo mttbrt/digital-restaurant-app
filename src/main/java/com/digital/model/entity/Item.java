@@ -1,5 +1,7 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +42,18 @@ public class Item {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+  private Set<ItemWithinOrder> itemsWithinOrder;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "tbl_item_with_icon",
+      joinColumns = @JoinColumn(name = "item_id"),
+      inverseJoinColumns = @JoinColumn(name = "icon_id"))
+  private Set<Icon> icons;
 
   public Integer getId() {
     return id;
@@ -94,4 +111,19 @@ public class Item {
     this.category = category;
   }
 
+  public Set<ItemWithinOrder> getItemsWithinOrder() {
+    return itemsWithinOrder;
+  }
+
+  public void setItemsWithinOrder(Set<ItemWithinOrder> itemsWithinOrder) {
+    this.itemsWithinOrder = itemsWithinOrder;
+  }
+
+  public Set<Icon> getIcons() {
+    return icons;
+  }
+
+  public void setIcons(Set<Icon> icons) {
+    this.icons = icons;
+  }
 }

@@ -1,6 +1,8 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.OffsetDateTime;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 @javax.persistence.Table(name = "tbl_session")
@@ -28,6 +31,10 @@ public class Session {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "table_id", nullable = false)
   private Table table;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "session")
+  private Set<Order> orders;
 
   public Integer getId() {
     return id;
@@ -61,4 +68,11 @@ public class Session {
     this.table = table;
   }
 
+  public Set<Order> getOrders() {
+    return orders;
+  }
+
+  public void setOrders(Set<Order> orders) {
+    this.orders = orders;
+  }
 }

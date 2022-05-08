@@ -1,4 +1,4 @@
-package com.digital.model.entity.pk;
+package com.digital.model.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,14 +7,23 @@ import javax.persistence.Embeddable;
 import org.hibernate.Hibernate;
 
 @Embeddable
-public class ItemWithIconPK implements Serializable {
+public class ItemWithinOrderPK implements Serializable {
 
-  private static final long serialVersionUID = -2046436366344868638L;
+  private static final long serialVersionUID = 2435318058190449566L;
+
+  @Column(name = "order_id", nullable = false)
+  private Integer orderId;
+
   @Column(name = "item_id", nullable = false)
   private Integer itemId;
 
-  @Column(name = "icon_id", nullable = false)
-  private Integer iconId;
+  public Integer getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(Integer orderId) {
+    this.orderId = orderId;
+  }
 
   public Integer getItemId() {
     return itemId;
@@ -22,14 +31,6 @@ public class ItemWithIconPK implements Serializable {
 
   public void setItemId(Integer itemId) {
     this.itemId = itemId;
-  }
-
-  public Integer getIconId() {
-    return iconId;
-  }
-
-  public void setIconId(Integer iconId) {
-    this.iconId = iconId;
   }
 
   @Override
@@ -40,14 +41,13 @@ public class ItemWithIconPK implements Serializable {
     if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    ItemWithIconPK entity = (ItemWithIconPK) o;
-    return Objects.equals(this.iconId, entity.iconId) &&
-        Objects.equals(this.itemId, entity.itemId);
+    ItemWithinOrderPK entity = (ItemWithinOrderPK) o;
+    return Objects.equals(this.itemId, entity.itemId) && Objects.equals(this.orderId, entity.orderId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(iconId, itemId);
+    return Objects.hash(itemId, orderId);
   }
 
 }

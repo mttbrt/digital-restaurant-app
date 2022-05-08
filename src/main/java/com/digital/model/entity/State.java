@@ -1,10 +1,14 @@
 package com.digital.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,10 @@ public class State {
 
   @Column(name = "title", nullable = false, length = 100)
   private String title;
+
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
+  private Set<ItemWithinOrder> itemsWithinOrder;
 
   public Integer getId() {
     return id;
@@ -35,4 +43,11 @@ public class State {
     this.title = title;
   }
 
+  public Set<ItemWithinOrder> getItemsWithinOrder() {
+    return itemsWithinOrder;
+  }
+
+  public void setItemsWithinOrder(Set<ItemWithinOrder> itemsWithinOrder) {
+    this.itemsWithinOrder = itemsWithinOrder;
+  }
 }
