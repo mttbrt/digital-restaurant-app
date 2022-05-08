@@ -1,6 +1,6 @@
 package com.digital.controller;
 
-import com.digital.model.User;
+import com.digital.model.entity.User;
 import com.digital.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
