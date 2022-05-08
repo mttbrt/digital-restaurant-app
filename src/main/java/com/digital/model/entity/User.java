@@ -43,7 +43,7 @@ public class User {
       name = "tbl_user_authority",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "authority_id"))
-  private Set<Icon> authorities;
+  private Set<Authority> authorities;
 
   public Integer getId() {
     return id;
@@ -77,11 +77,11 @@ public class User {
     this.orders = orders;
   }
 
-  public Set<Icon> getAuthorities() {
+  public Set<Authority> getAuthorities() {
     return authorities;
   }
 
-  public void setAuthorities(Set<Icon> authorities) {
+  public void setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
   }
 
