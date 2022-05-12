@@ -42,7 +42,8 @@ public class ItemWithinOrderPK implements Serializable {
       return false;
     }
     ItemWithinOrderPK entity = (ItemWithinOrderPK) o;
-    return Objects.equals(this.itemId, entity.itemId) && Objects.equals(this.orderId, entity.orderId);
+    return Objects.equals(this.itemId, entity.itemId) && Objects.equals(this.orderId,
+        entity.orderId);
   }
 
   @Override

@@ -18,7 +18,7 @@ import org.springframework.web.util.WebUtils;
 @Component
 public class JWTUtils {
 
-  private static final String COOKIE_PATH = "/api/v1";
+  private final static String COOKIE_PATH = "/api/v1";
 
   @Value("${jwt.secret}")
   private String jwtSecret;

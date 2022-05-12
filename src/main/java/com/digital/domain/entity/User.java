@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbl_user")
 public class User {
+
   // TODO: add validation
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -23,12 +23,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private UserDetailsService userDetailsService;
-  private AuthEntryPointJwt unauthorizedHandler;
-  private OncePerRequestFilter jwtAuthenticationFilter;
+  private final UserDetailsService userDetailsService;
+  private final AuthEntryPointJwt unauthorizedHandler;
+  private final OncePerRequestFilter jwtAuthenticationFilter;
 
   @Autowired
-  public SecurityConfig(UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler, JWTAuthenticationFilter jwtAuthenticationFilter) {
+  public SecurityConfig(UserDetailsService userDetailsService,
+      AuthEntryPointJwt unauthorizedHandler, JWTAuthenticationFilter jwtAuthenticationFilter) {
     this.userDetailsService = userDetailsService;
     this.unauthorizedHandler = unauthorizedHandler;
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;

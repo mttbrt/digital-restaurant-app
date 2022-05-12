@@ -1,8 +1,8 @@
-package com.digital.service;
+package com.digital.service.impl;
 
 import com.digital.domain.auth.UserDetailsImpl;
 import com.digital.domain.entity.User;
-import com.digital.repository.UserRepository;
+import com.digital.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private UserRepository userRepository;
+  private final IUserRepository userRepository;
 
   @Autowired
-  public UserDetailsServiceImpl(UserRepository userRepository) {
+  public UserDetailsServiceImpl(IUserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
