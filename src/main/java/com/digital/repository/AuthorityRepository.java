@@ -1,12 +1,13 @@
 package com.digital.repository;
 
+import com.digital.domain.entity.Authority;
 import com.digital.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
-  User findByUsername(String username);
+  Authority findByName(String name);
 
 }
