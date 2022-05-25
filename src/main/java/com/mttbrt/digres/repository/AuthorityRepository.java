@@ -1,12 +1,12 @@
 package com.mttbrt.digres.repository;
 
-import com.mttbrt.digres.domain.entity.User;
+import com.mttbrt.digres.domain.entity.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, Long> {
+public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
-  User findByUsername(String username);
+  Authority findByName(String name);
 
 }

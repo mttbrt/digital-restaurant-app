@@ -2,8 +2,7 @@ package com.mttbrt.digres.service.impl;
 
 import com.mttbrt.digres.domain.auth.UserDetailsImpl;
 import com.mttbrt.digres.domain.entity.User;
-import com.mttbrt.digres.repository.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mttbrt.digres.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,10 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final IUserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  public UserDetailsServiceImpl(IUserRepository userRepository) {
+  public UserDetailsServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

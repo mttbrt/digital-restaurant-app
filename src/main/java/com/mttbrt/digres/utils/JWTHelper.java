@@ -3,7 +3,6 @@ package com.mttbrt.digres.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.net.HttpCookie;
 import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +19,13 @@ import org.springframework.web.util.WebUtils;
 @Component
 public class JWTHelper {
 
-
+  private final UserDetailsService userDetailsService;
   @Value("${csrf.cookie.name}")
   private String CSRF_COOKIE_NAME;
   @Value("${csrf.cookie.path}")
   private String CSRF_COOKIE_PATH;
   @Value("${csrf.cookie.domain}")
   private String CSRF_COOKIE_DOMAIN;
-
   @Value("${jwt.cookie.name}")
   private String JWT_COOKIE_NAME;
   @Value("${jwt.cookie.path}")
@@ -41,9 +39,6 @@ public class JWTHelper {
   @Value("${jwt.expirationTime}")
   private int JWT_EXPIRATION_TIME;
 
-  private final UserDetailsService userDetailsService;
-
-  @Autowired
   public JWTHelper(UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
   }
@@ -60,7 +55,8 @@ public class JWTHelper {
         .compact();
 
     // set JWT as cookie
-    res.addCookie(prepareCookie(JWT_COOKIE_NAME, jwt, JWT_COOKIE_DOMAIN, JWT_COOKIE_PATH, true, JWT_COOKIE_MAXAGE));
+    res.addCookie(prepareCookie(JWT_COOKIE_NAME, jwt, JWT_COOKIE_DOMAIN, JWT_COOKIE_PATH, true,
+        JWT_COOKIE_MAXAGE));
   }
 
   public Authentication getAuthentication(HttpServletRequest request) {
@@ -86,11 +82,14 @@ public class JWTHelper {
   }
 
   public void removeAuthentication(HttpServletResponse res) {
-    res.addCookie(prepareCookie(JWT_COOKIE_NAME, null, JWT_COOKIE_DOMAIN, JWT_COOKIE_PATH, true, 0));
-    res.addCookie(prepareCookie(CSRF_COOKIE_NAME, null, CSRF_COOKIE_DOMAIN, CSRF_COOKIE_PATH, false, 0));
+    res.addCookie(
+        prepareCookie(JWT_COOKIE_NAME, null, JWT_COOKIE_DOMAIN, JWT_COOKIE_PATH, true, 0));
+    res.addCookie(
+        prepareCookie(CSRF_COOKIE_NAME, null, CSRF_COOKIE_DOMAIN, CSRF_COOKIE_PATH, false, 0));
   }
 
-  private Cookie prepareCookie(String name, String content, String domain, String path, boolean httpOnly, int maxAge) {
+  private Cookie prepareCookie(String name, String content, String domain, String path,
+      boolean httpOnly, int maxAge) {
     Cookie cookie = new Cookie(name, content);
     cookie.setDomain(domain);
     cookie.setPath(path);

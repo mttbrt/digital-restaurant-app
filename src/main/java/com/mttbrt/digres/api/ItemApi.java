@@ -1,24 +1,20 @@
 package com.mttbrt.digres.api;
 
 import com.mttbrt.digres.domain.entity.Item;
-import com.mttbrt.digres.repository.IItemRepository;
+import com.mttbrt.digres.repository.ItemRepository;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/")
 public class ItemApi {
 
-  private final IItemRepository itemRepository;
+  private final ItemRepository itemRepository;
 
-  @Autowired
-  public ItemApi(IItemRepository itemRepository) {
+  public ItemApi(ItemRepository itemRepository) {
     this.itemRepository = itemRepository;
   }
 

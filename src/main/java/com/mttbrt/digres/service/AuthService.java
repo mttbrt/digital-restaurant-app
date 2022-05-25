@@ -3,7 +3,7 @@ package com.mttbrt.digres.service;
 import com.mttbrt.digres.domain.entity.Authority;
 import java.util.Set;
 
-public interface IAuthService {
+public interface AuthService {
 
   boolean isUserRegistered(String username);
 

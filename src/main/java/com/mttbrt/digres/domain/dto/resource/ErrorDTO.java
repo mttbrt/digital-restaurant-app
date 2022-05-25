@@ -1,5 +1,6 @@
 package com.mttbrt.digres.domain.dto.resource;
 
+import com.mttbrt.digres.domain.ErrorCode;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -19,9 +20,9 @@ public class ErrorDTO {
   public ErrorDTO() {
   }
 
-  public ErrorDTO(int status, String code, String title, String detail, SourceDTO source) {
+  public ErrorDTO(int status, ErrorCode code, String title, String detail, SourceDTO source) {
     this.status = status;
-    this.code = code;
+    this.code = code.name();
     this.title = title;
     this.detail = detail;
     this.source = source;

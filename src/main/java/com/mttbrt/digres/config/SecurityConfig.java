@@ -30,11 +30,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final static String AUTH_ENDPOINT = "/api/v1/auth";
-
   private final UserDetailsService userDetailsService;
+  @Value("${csrf.cookie.name}")
+  private String CSRF_COOKIE_NAME;
+  @Value("${csrf.cookie.path}")
+  private String CSRF_COOKIE_PATH;
+  @Value("${csrf.cookie.domain}")
+  private String CSRF_COOKIE_DOMAIN;
+  @Value("${app.auth.endpoint}")
+  private String AUTH_ENDPOINT;
 
-  @Autowired
   public SecurityConfig(UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
   }
@@ -43,25 +48,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .cors()
-      .and()
-        // ignore the csrf cookie in the login page, and allow the front-end to read the cookie
+        .and()
         .csrf()
         .ignoringAntMatchers(AUTH_ENDPOINT + "/login")
         .csrfTokenRepository(getCsrfTokenRepository())
-      .and()
+        .and()
         .exceptionHandling()
         .authenticationEntryPoint(authEntryPointJwt())
-      .and()
+        .and()
         // do not create any session
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
+        .and()
         .authorizeRequests()
         .antMatchers(AUTH_ENDPOINT + "/login", AUTH_ENDPOINT + "/logout")
         .permitAll()
         .anyRequest()
         .authenticated()
-      .and()
+        .and()
         .addFilterAfter(jwtLoginFilter(), ExceptionTranslationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter(), ExceptionTranslationFilter.class);
   }
@@ -99,10 +103,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("*"));
-    config.setAllowedMethods(List.of("*"));
-    config.setAllowCredentials(true);
-    config.addAllowedHeader("*");
+    config.setAllowedOrigins(List.of("http://localhost:3000/"));
+    config.setAllowedMethods(List.of("GET", "POST", "OPTION"));
+    config.setAllowCredentials(true); // to let the client access the cookies
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;
@@ -110,8 +113,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private CsrfTokenRepository getCsrfTokenRepository() {
     CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-    tokenRepository.setCookieDomain("localhost");
-    tokenRepository.setCookiePath("/api/v1");
+    tokenRepository.setCookieName(CSRF_COOKIE_NAME);
+    tokenRepository.setCookieDomain(CSRF_COOKIE_DOMAIN);
+    tokenRepository.setCookiePath(CSRF_COOKIE_PATH);
     return tokenRepository;
   }
 

@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 
 @JsonTypeInfo(use = Id.NAME, property = "type", visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = LoginResourceDTO.class),
     @JsonSubTypes.Type(value = RegisterResourceDTO.class)
 })
 public abstract class IResource {

@@ -1,7 +1,7 @@
 package com.mttbrt.digres.domain.dto.resource;
 
-import com.mttbrt.digres.domain.dto.resource.attribute.RegisterDTO;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.mttbrt.digres.domain.dto.resource.attribute.RegisterDTO;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 

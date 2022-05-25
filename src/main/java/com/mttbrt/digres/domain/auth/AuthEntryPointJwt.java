@@ -1,11 +1,11 @@
 package com.mttbrt.digres.domain.auth;
 
+import static com.mttbrt.digres.domain.ErrorCode.REQUEST_ERROR;
+import static com.mttbrt.digres.utils.PreprocessingHelper.createError;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mttbrt.digres.domain.dto.ErrorsDTO;
-import com.mttbrt.digres.domain.dto.resource.ErrorDTO;
-import com.mttbrt.digres.domain.dto.resource.SourceDTO;
 import java.io.IOException;
-import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -21,15 +21,11 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-    ErrorsDTO errors = new ErrorsDTO(
-        Collections.singletonList(new ErrorDTO(
-            HttpStatus.UNAUTHORIZED.value(),
-            "invalid-token",
-            "Invalid token provided.",
-            "The token provided is not valid.",
-            new SourceDTO(request.getServletPath())
-        ))
-    );
+    ErrorsDTO errors = createError(HttpStatus.BAD_REQUEST.value(),
+        REQUEST_ERROR,
+        "Request not valid.",
+        "The request is not valid.",
+        request.getServletPath());
 
     final ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(response.getOutputStream(), errors);
