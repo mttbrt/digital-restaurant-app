@@ -1,5 +1,9 @@
 package com.mttbrt.digres.config;
 
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
+
 import com.mttbrt.digres.config.filter.JWTAuthenticationFilter;
 import com.mttbrt.digres.config.filter.JWTLoginFilter;
 import com.mttbrt.digres.domain.auth.AuthEntryPointJwt;
@@ -9,15 +13,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -28,51 +31,46 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-  private final UserDetailsService userDetailsService;
   @Value("${csrf.cookie.name}")
   private String CSRF_COOKIE_NAME;
   @Value("${csrf.cookie.path}")
   private String CSRF_COOKIE_PATH;
   @Value("${csrf.cookie.domain}")
   private String CSRF_COOKIE_DOMAIN;
-  @Value("${app.auth.endpoint}")
-  private String AUTH_ENDPOINT;
 
-  public SecurityConfig(UserDetailsService userDetailsService) {
-    this.userDetailsService = userDetailsService;
-  }
+  @Autowired
+  private AuthEntryPointJwt authEntryPointJwt;
+  @Autowired
+  private AuthenticationConfiguration authConf;
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .cors()
         .and()
         .csrf()
-        .ignoringAntMatchers(AUTH_ENDPOINT + "/login")
+        .ignoringAntMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT)
         .csrfTokenRepository(getCsrfTokenRepository())
         .and()
         .exceptionHandling()
-        .authenticationEntryPoint(authEntryPointJwt())
+        .authenticationEntryPoint(authEntryPointJwt)
         .and()
         // do not create any session
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        .antMatchers(AUTH_ENDPOINT + "/login", AUTH_ENDPOINT + "/logout")
+        .antMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT, AUTH_ENDPOINT + LOGOUT_ENDPOINT)
         .permitAll()
         .anyRequest()
         .authenticated()
         .and()
         .addFilterAfter(jwtLoginFilter(), ExceptionTranslationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter(), ExceptionTranslationFilter.class);
-  }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    return http.build();
   }
 
   @Bean
@@ -81,23 +79,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
-  }
-
-  @Bean
   public JWTLoginFilter jwtLoginFilter() throws Exception {
-    return new JWTLoginFilter(authenticationManagerBean());
+    return new JWTLoginFilter(authConf.getAuthenticationManager());
   }
 
   @Bean
   public JWTAuthenticationFilter jwtAuthenticationFilter() {
     return new JWTAuthenticationFilter();
-  }
-
-  @Bean
-  public AuthEntryPointJwt authEntryPointJwt() {
-    return new AuthEntryPointJwt();
   }
 
   @Bean

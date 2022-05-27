@@ -1,14 +1,16 @@
 package com.mttbrt.digres.service;
 
+import com.mttbrt.digres.domain.dto.DataDTO;
+import com.mttbrt.digres.domain.dto.ResponseDTO;
 import com.mttbrt.digres.domain.entity.Authority;
+import java.net.URISyntaxException;
 import java.util.Set;
+import javax.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
-  boolean isUserRegistered(String username);
+  ResponseDTO registerUser(DataDTO data);
 
-  void registerUser(String username, String password, Set<String> roles);
-
-  Set<Authority> getAuthorities(Set<String> roles);
+  ResponseDTO logoutUser(HttpServletResponse response);
 
 }

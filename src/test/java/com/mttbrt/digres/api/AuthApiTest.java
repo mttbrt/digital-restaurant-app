@@ -2,7 +2,7 @@ package com.mttbrt.digres.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,10 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.AbstractBindingResult;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,21 +30,46 @@ public class AuthApiTest {
   private AuthService authService;
   @Mock
   private AbstractBindingResult errors;
-  @Mock
-  private MockHttpServletRequest request;
 
   @Test
-  public void testRegister() throws URISyntaxException {
-    DataDTO data = new DataDTO(
-        new RegisterResourceDTO("REG01", "registration",
-            new RegisterDTO("user", "password", new HashSet<>(List.of("STAFF")))
-        ));
+  public void test_register_existing_user() throws URISyntaxException {
+//    RegisterDTO registerDTO = new RegisterDTO("user", "password", new HashSet<>(List.of("STAFF")));
+//    DataDTO data = new DataDTO(new RegisterResourceDTO("REG01", "registration", registerDTO));
+//
+//    when(authService.isUserRegistered(any(String.class))).thenReturn(true);
+//    ResponseEntity<?> res = authApi.register(data, errors);
+//
+//    verify(authService).isUserRegistered(registerDTO.getUsername());
+//    verify(authService, never()).registerUser(registerDTO.getUsername(), registerDTO.getPassword(), registerDTO.getRoles());
+//    assertThat(res.getStatusCodeValue()).isEqualTo(400);
+  }
 
-    when(authService.isUserRegistered(any(String.class))).thenReturn(false);
-    ResponseEntity<?> res = authApi.register(data, request, errors);
+  @Test
+  public void test_register_new_user() throws URISyntaxException {
+//    RegisterDTO registerDTO = new RegisterDTO("user", "password", new HashSet<>(List.of("STAFF")));
+//    DataDTO data = new DataDTO(new RegisterResourceDTO("REG01", "registration", registerDTO));
+//
+//    when(authService.isUserRegistered(any(String.class))).thenReturn(false);
+//    ResponseEntity<?> res = authApi.register(data, errors);
+//
+//    verify(authService).isUserRegistered(registerDTO.getUsername());
+//    verify(authService).registerUser(registerDTO.getUsername(), registerDTO.getPassword(), registerDTO.getRoles());
+//    assertThat(res.getStatusCodeValue()).isEqualTo(201);
+  }
 
-    verify(authService).registerUser("user", "password", new HashSet<>(List.of("STAFF")));
-    assertThat(res.getStatusCodeValue()).isEqualTo(201);
+  @Test
+  public void test_register_new_user_with_validation_errors() throws URISyntaxException {
+//    RegisterDTO registerDTO = new RegisterDTO("user", "password", new HashSet<>(List.of("STAFF")));
+//    DataDTO data = new DataDTO(new RegisterResourceDTO("REG01", "registration", null));
+//
+////    errors.addError();
+//
+//    when(authService.isUserRegistered(any(String.class))).thenReturn(false);
+//    ResponseEntity<?> res = authApi.register(data, errors);
+//
+//    verify(authService).isUserRegistered(registerDTO.getUsername());
+//    verify(authService).registerUser(registerDTO.getUsername(), registerDTO.getPassword(), registerDTO.getRoles());
+//    assertThat(res.getStatusCodeValue()).isEqualTo(201);
   }
 
 }

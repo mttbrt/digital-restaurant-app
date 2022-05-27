@@ -21,6 +21,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
   private JWTHelper jwtHelper;
 
+  @Autowired
   public void setJwtHelper(JWTHelper jwtHelper) {
     this.jwtHelper = jwtHelper;
   }

@@ -1,9 +1,10 @@
 package com.mttbrt.digres.config.filter;
 
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.mttbrt.digres.utils.JWTHelper;
-import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,24 +18,22 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
-@Component
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-  private static final String LOGIN_URL = "/api/v1/auth/login";
   private JWTHelper jwtHelper;
 
   public JWTLoginFilter(AuthenticationManager authManager) {
-    super(new AntPathRequestMatcher(LOGIN_URL));
-    setAuthenticationManager(authManager);
+    super(new AntPathRequestMatcher(AUTH_ENDPOINT + LOGIN_ENDPOINT));
+    super.setAuthenticationManager(authManager);
   }
 
+  @Autowired
   public void setJwtHelper(JWTHelper jwtHelper) {
     this.jwtHelper = jwtHelper;
   }
 
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
-      throws IOException {
+  public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
     String headerUsrPsw = req.getHeader(AUTHORIZATION).substring(6); // remove "Basic "
     String decoded = new String(Base64.decodeBase64(headerUsrPsw));
     String[] usr_psw = decoded.split(":");

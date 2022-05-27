@@ -6,7 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class ErrorsDTO {
+public class ErrorsDTO implements ResponseDTO {
 
   @NotNull
   @Size(min = 1, message = "Please return at least 1 error.")
