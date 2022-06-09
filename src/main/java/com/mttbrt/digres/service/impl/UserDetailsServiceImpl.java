@@ -1,7 +1,7 @@
 package com.mttbrt.digres.service.impl;
 
-import com.mttbrt.digres.domain.auth.UserDetailsImpl;
-import com.mttbrt.digres.domain.entity.User;
+import com.mttbrt.digres.auth.UserDetailsImpl;
+import com.mttbrt.digres.domain.User;
 import com.mttbrt.digres.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

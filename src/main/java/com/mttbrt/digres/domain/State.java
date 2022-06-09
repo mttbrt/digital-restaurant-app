@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
@@ -12,20 +12,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_category")
-public class Category {
+@Table(name = "tbl_state")
+public class State {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
+  @Column(name = "title", nullable = false, length = 100)
+  private String title;
 
   @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-  private Set<Item> items;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
+  private Set<ItemWithinOrder> itemsWithinOrder;
 
   public Integer getId() {
     return id;
@@ -35,19 +35,19 @@ public class Category {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
-  public Set<Item> getItems() {
-    return items;
+  public Set<ItemWithinOrder> getItemsWithinOrder() {
+    return itemsWithinOrder;
   }
 
-  public void setItems(Set<Item> items) {
-    this.items = items;
+  public void setItemsWithinOrder(Set<ItemWithinOrder> itemsWithinOrder) {
+    this.itemsWithinOrder = itemsWithinOrder;
   }
 }

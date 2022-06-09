@@ -1,10 +1,9 @@
-package com.mttbrt.digres.domain.auth;
+package com.mttbrt.digres.auth;
 
-import static com.mttbrt.digres.domain.ErrorCode.REQUEST_ERROR;
 import static com.mttbrt.digres.utils.PreprocessingHelper.createError;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mttbrt.digres.domain.dto.ErrorsDTO;
+import com.mttbrt.digres.dto.response.ResponseDTO;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,14 +22,13 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-    ErrorsDTO errors = createError(HttpStatus.BAD_REQUEST.value(),
-        REQUEST_ERROR,
+    ResponseDTO res = createError(HttpStatus.BAD_REQUEST.value(),
         "Request not valid.",
         "The request is not valid.",
         request.getServletPath());
 
     final ObjectMapper mapper = new ObjectMapper();
-    mapper.writeValue(response.getOutputStream(), errors);
+    mapper.writeValue(response.getOutputStream(), res);
   }
 
 }

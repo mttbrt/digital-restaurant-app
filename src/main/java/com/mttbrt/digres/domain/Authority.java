@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
@@ -8,23 +8,24 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
-@javax.persistence.Table(name = "tbl_table")
-public class Table {
+@Table(name = "tbl_authority")
+public class Authority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "code", nullable = false, length = 100)
-  private String code;
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
 
   @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "table")
-  private Set<Session> sessions;
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authorities")
+  private Set<User> users;
 
   public Integer getId() {
     return id;
@@ -34,19 +35,19 @@ public class Table {
     this.id = id;
   }
 
-  public String getCode() {
-    return code;
+  public String getName() {
+    return name;
   }
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public Set<Session> getSessions() {
-    return sessions;
+  public Set<User> getUsers() {
+    return users;
   }
 
-  public void setSessions(Set<Session> sessions) {
-    this.sessions = sessions;
+  public void setUsers(Set<User> users) {
+    this.users = users;
   }
 }

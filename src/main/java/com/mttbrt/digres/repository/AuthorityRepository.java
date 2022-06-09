@@ -1,6 +1,6 @@
 package com.mttbrt.digres.repository;
 
-import com.mttbrt.digres.domain.entity.Authority;
+import com.mttbrt.digres.domain.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

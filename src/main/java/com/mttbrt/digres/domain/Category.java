@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
@@ -8,12 +8,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_authority")
-public class Authority {
+@Table(name = "tbl_category")
+public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class Authority {
   private String name;
 
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authorities")
-  private Set<User> users;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+  private Set<Item> items;
 
   public Integer getId() {
     return id;
@@ -43,11 +43,11 @@ public class Authority {
     this.name = name;
   }
 
-  public Set<User> getUsers() {
-    return users;
+  public Set<Item> getItems() {
+    return items;
   }
 
-  public void setUsers(Set<User> users) {
-    this.users = users;
+  public void setItems(Set<Item> items) {
+    this.items = items;
   }
 }

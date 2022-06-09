@@ -1,26 +1,27 @@
-package com.mttbrt.digres.domain.dto.resource.attribute;
+package com.mttbrt.digres.dto.request;
 
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class RegisterDTO {
+public class RegisterUserDTO {
 
   @NotBlank
-  @Size(min = 4, max = 32, message = "The username length must be between 4 and 32 characters.")
+  @Size(min = 4, max = 32, message = "The length must be between 4 and 32 characters.")
   private String username;
   @NotBlank
-  @Size(min = 8, max = 32, message = "The password length must be between 8 and 32 characters.")
+  @Size(min = 8, max = 32, message = "The length must be between 8 and 32 characters.")
   private String password;
   @NotNull
   @Size(min = 1, message = "At least one role must be provided.")
   private Set<@NotBlank @Size(min = 4, max = 32) String> roles;
 
-  public RegisterDTO() {
+  public RegisterUserDTO() {
+
   }
 
-  public RegisterDTO(String username, String password,
+  public RegisterUserDTO(String username, String password,
       Set<@NotBlank @Size(min = 4, max = 32) String> roles) {
     this.username = username;
     this.password = password;

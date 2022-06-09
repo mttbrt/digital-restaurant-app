@@ -1,6 +1,6 @@
-package com.mttbrt.digres.domain.auth;
+package com.mttbrt.digres.auth;
 
-import com.mttbrt.digres.domain.entity.User;
+import com.mttbrt.digres.domain.User;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;

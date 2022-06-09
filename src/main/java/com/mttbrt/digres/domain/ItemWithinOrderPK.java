@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import java.io.Serializable;
 import java.util.Objects;

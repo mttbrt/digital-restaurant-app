@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

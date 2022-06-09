@@ -1,24 +1,22 @@
 package com.mttbrt.digres.service.impl;
 
-import static com.mttbrt.digres.domain.ErrorCode.USER_REGISTRATION_ERROR;
-import static com.mttbrt.digres.utils.PreprocessingHelper.castRequest;
 import static com.mttbrt.digres.utils.PreprocessingHelper.createError;
 import static com.mttbrt.digres.utils.StaticVariables.AUTHORITY_PREFIX;
 import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
 
-import com.mttbrt.digres.domain.dto.DataDTO;
-import com.mttbrt.digres.domain.dto.PositiveResponseDTO;
-import com.mttbrt.digres.domain.dto.ResponseDTO;
-import com.mttbrt.digres.domain.dto.resource.RegisterResourceDTO;
-import com.mttbrt.digres.domain.dto.resource.attribute.RegisterDTO;
-import com.mttbrt.digres.domain.entity.Authority;
-import com.mttbrt.digres.domain.entity.User;
+import com.mttbrt.digres.domain.Authority;
+import com.mttbrt.digres.domain.User;
+import com.mttbrt.digres.dto.request.RegisterUserDTO;
+import com.mttbrt.digres.dto.response.ResponseDTO;
+import com.mttbrt.digres.dto.response.item.UserDTO;
+import com.mttbrt.digres.dto.response.item.UsersDTO;
 import com.mttbrt.digres.repository.AuthorityRepository;
 import com.mttbrt.digres.repository.UserRepository;
 import com.mttbrt.digres.service.AuthService;
 import com.mttbrt.digres.utils.JWTHelper;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -42,36 +40,35 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public ResponseDTO registerUser(DataDTO data) {
+  public ResponseDTO registerUser(RegisterUserDTO request) {
     String reqPath = AUTH_ENDPOINT + REGISTER_ENDPOINT;
 
-    ResponseDTO res = castRequest(reqPath, data, RegisterResourceDTO.class);
-    if (res != null) {
-      return res;
-    }
-
-    RegisterDTO registerReq = ((RegisterResourceDTO) data.getData()).getAttributes();
-    if (userRepository.findByUsername(registerReq.getUsername()) != null) {
+    if (userRepository.findByUsername(request.getUsername()) != null) {
       return createError(HttpStatus.BAD_REQUEST.value(),
-          USER_REGISTRATION_ERROR,
           "User already exists.",
           "An account with the given username already exists.",
           reqPath);
     }
 
     User newUser = new User(
-        registerReq.getUsername(),
-        passwordEncoder.encode(registerReq.getPassword()),
-        getAuthorities(registerReq.getRoles()));
+        request.getUsername(),
+        passwordEncoder.encode(request.getPassword()),
+        getAuthorities(request.getRoles()));
     userRepository.save(newUser);
 
-    return new PositiveResponseDTO("/api/v1/user/" + registerReq.getUsername());
+    List<UserDTO> users = List.of(new UserDTO(request.getUsername(), request.getRoles()));
+    UsersDTO data = new UsersDTO(users);
+    return new ResponseDTO(data);
   }
 
   @Override
-  public ResponseDTO logoutUser(HttpServletResponse response) {
-    jwtHelper.removeAuthentication(response);
-    return new PositiveResponseDTO("ok");
+  public boolean logoutUser(HttpServletResponse response) {
+    try {
+      jwtHelper.removeAuthentication(response);
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
   }
 
   private Set<Authority> getAuthorities(Set<String> roles) {

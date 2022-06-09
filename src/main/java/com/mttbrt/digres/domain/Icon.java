@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
@@ -8,12 +8,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tbl_state")
-public class State {
+@Table(name = "tbl_icon")
+public class Icon {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,15 @@ public class State {
   @Column(name = "title", nullable = false, length = 100)
   private String title;
 
+  @Column(name = "description", length = 500)
+  private String description;
+
+  @Column(name = "image", nullable = false, length = 200)
+  private String image;
+
   @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "state")
-  private Set<ItemWithinOrder> itemsWithinOrder;
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "icons")
+  private Set<Item> items;
 
   public Integer getId() {
     return id;
@@ -43,11 +49,27 @@ public class State {
     this.title = title;
   }
 
-  public Set<ItemWithinOrder> getItemsWithinOrder() {
-    return itemsWithinOrder;
+  public String getDescription() {
+    return description;
   }
 
-  public void setItemsWithinOrder(Set<ItemWithinOrder> itemsWithinOrder) {
-    this.itemsWithinOrder = itemsWithinOrder;
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+  public Set<Item> getItems() {
+    return items;
+  }
+
+  public void setItems(Set<Item> items) {
+    this.items = items;
   }
 }

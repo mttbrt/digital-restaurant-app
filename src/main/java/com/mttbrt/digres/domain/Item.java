@@ -1,4 +1,4 @@
-package com.mttbrt.digres.domain.entity;
+package com.mttbrt.digres.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
