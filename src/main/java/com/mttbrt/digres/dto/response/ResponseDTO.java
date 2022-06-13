@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.mttbrt.digres.dto.response.item.IItem;
 import com.mttbrt.digres.dto.response.validation.ValidResponseDTO;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -60,4 +61,21 @@ public class ResponseDTO {
   public void setError(ErrorDTO error) {
     this.error = error;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ResponseDTO that = (ResponseDTO) o;
+
+    return Objects.equals(apiVersion, that.getApiVersion())
+        && Objects.equals(data, that.getData())
+        && Objects.equals(error, that.getError());
+  }
+
 }

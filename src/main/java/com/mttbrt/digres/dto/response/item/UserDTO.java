@@ -1,5 +1,7 @@
 package com.mttbrt.digres.dto.response.item;
 
+import com.mttbrt.digres.dto.response.ResponseDTO;
+import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -34,5 +36,20 @@ public class UserDTO {
 
   public void setRoles(Set<String> roles) {
     this.roles = roles;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    UserDTO that = (UserDTO) o;
+
+    return Objects.equals(username, that.getUsername())
+        && Objects.equals(roles, that.getRoles());
   }
 }

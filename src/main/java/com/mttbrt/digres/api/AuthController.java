@@ -1,10 +1,12 @@
 package com.mttbrt.digres.api;
 
 import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
 
 import com.mttbrt.digres.dto.request.RegisterUserDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.service.AuthService;
+import java.net.URI;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -25,13 +27,13 @@ public class AuthController {
   }
 
   @RolesAllowed("ADMIN")
-  @PostMapping("/register")
+  @PostMapping(REGISTER_ENDPOINT)
   public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO request) {
     ResponseDTO response = authService.registerUser(request);
     if (response.getError() != null) {
       return ResponseEntity.badRequest().body(response);
     } else if (response.getData() != null) {
-      return ResponseEntity.ok().body(response);
+      return ResponseEntity.created(URI.create("/users/" + request.getUsername())).body(response);
     }
     return ResponseEntity.internalServerError().build();
   }
@@ -41,7 +43,7 @@ public class AuthController {
     if (authService.logoutUser(res)) {
       return ResponseEntity.ok().build();
     }
-    return ResponseEntity.badRequest().build();
+    return ResponseEntity.internalServerError().build();
   }
 
 }
