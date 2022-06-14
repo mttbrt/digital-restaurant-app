@@ -13,12 +13,11 @@ import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.dto.response.SingleErrorDTO;
 import com.mttbrt.digres.dto.response.item.UserDTO;
 import com.mttbrt.digres.dto.response.item.UsersDTO;
-import com.mttbrt.digres.repository.AuthorityRepository;
-import com.mttbrt.digres.repository.UserRepository;
+import com.mttbrt.digres.repository.AuthorityDao;
+import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.utils.JWTHelper;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,9 +34,9 @@ public class AuthServiceImplTest {
   @InjectMocks
   private AuthServiceImpl authService;
   @Mock
-  private UserRepository userRepository;
+  private UserDao userDao;
   @Mock
-  private AuthorityRepository authRepository;
+  private AuthorityDao authRepository;
   @Mock
   private PasswordEncoder passwordEncoder;
   @Mock
@@ -57,7 +56,7 @@ public class AuthServiceImplTest {
   void register_non_existing_user() {
     final ResponseDTO expectedRes = new ResponseDTO(new UsersDTO(List.of(new UserDTO(username, roles))));
 
-    when(userRepository.findByUsername(any(String.class))).thenReturn(null);
+    when(userDao.findByUsername(any(String.class))).thenReturn(null);
     ResponseDTO responseEntity = authService.registerUser(req);
 
     assertThat(responseEntity).isEqualTo(expectedRes);
@@ -71,7 +70,7 @@ public class AuthServiceImplTest {
         List.of(new SingleErrorDTO("An account with the given username already exists.",
         AUTH_ENDPOINT + REGISTER_ENDPOINT))));
 
-    when(userRepository.findByUsername(any(String.class))).thenReturn(new User());
+    when(userDao.findByUsername(any(String.class))).thenReturn(new User());
     ResponseDTO responseEntity = authService.registerUser(req);
 
     assertThat(responseEntity).isEqualTo(expectedRes);

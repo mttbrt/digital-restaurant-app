@@ -27,7 +27,7 @@ public class AuthController {
   }
 
   @RolesAllowed("ADMIN")
-  @PostMapping(REGISTER_ENDPOINT)
+  @PostMapping("/register")
   public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO request) {
     ResponseDTO response = authService.registerUser(request);
     if (response.getError() != null) {
@@ -38,7 +38,7 @@ public class AuthController {
     return ResponseEntity.internalServerError().build();
   }
 
-  @PostMapping(LOGOUT_ENDPOINT)
+  @PostMapping("/logout")
   public ResponseEntity<?> logout(HttpServletResponse res) {
     if (authService.logoutUser(res)) {
       return ResponseEntity.ok().build();

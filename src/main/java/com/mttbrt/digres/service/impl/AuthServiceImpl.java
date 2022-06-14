@@ -11,8 +11,8 @@ import com.mttbrt.digres.dto.request.RegisterUserDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.dto.response.item.UserDTO;
 import com.mttbrt.digres.dto.response.item.UsersDTO;
-import com.mttbrt.digres.repository.AuthorityRepository;
-import com.mttbrt.digres.repository.UserRepository;
+import com.mttbrt.digres.repository.AuthorityDao;
+import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.service.AuthService;
 import com.mttbrt.digres.utils.JWTHelper;
 import java.util.HashSet;
@@ -26,14 +26,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-  private final UserRepository userRepository;
-  private final AuthorityRepository authRepository;
+  private final UserDao userDao;
+  private final AuthorityDao authRepository;
   private final PasswordEncoder passwordEncoder;
   private final JWTHelper jwtHelper;
 
-  public AuthServiceImpl(UserRepository userRepository, AuthorityRepository authRepository,
+  public AuthServiceImpl(UserDao userDao, AuthorityDao authRepository,
       PasswordEncoder passwordEncoder, JWTHelper jwtHelper) {
-    this.userRepository = userRepository;
+    this.userDao = userDao;
     this.authRepository = authRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtHelper = jwtHelper;
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
   public ResponseDTO registerUser(RegisterUserDTO request) {
     String reqPath = AUTH_ENDPOINT + REGISTER_ENDPOINT;
 
-    if (userRepository.findByUsername(request.getUsername()) != null) {
+    if (userDao.findByUsername(request.getUsername()) != null) {
       return createError(HttpStatus.BAD_REQUEST.value(),
           "User already exists.",
           "An account with the given username already exists.",
@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         request.getUsername(),
         passwordEncoder.encode(request.getPassword()),
         getAuthorities(request.getRoles()));
-    userRepository.save(newUser);
+    userDao.save(newUser);
 
     List<UserDTO> users = List.of(new UserDTO(request.getUsername(), request.getRoles()));
     UsersDTO data = new UsersDTO(users);

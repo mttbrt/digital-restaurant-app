@@ -44,15 +44,8 @@ public class JWTHelper {
   }
 
   public void addAuthentication(HttpServletResponse res, Authentication auth) {
-    Date now = new Date();
-
     // create new JWT
-    String jwt = Jwts.builder()
-        .setSubject(auth.getName())
-        .setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + JWT_EXPIRATION_TIME))
-        .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
-        .compact();
+    String jwt = generateJwt(auth.getName());
 
     // set JWT as cookie
     res.addCookie(prepareCookie(JWT_COOKIE_NAME, jwt, JWT_COOKIE_DOMAIN, JWT_COOKIE_PATH, true,
@@ -88,7 +81,17 @@ public class JWTHelper {
         prepareCookie(CSRF_COOKIE_NAME, null, CSRF_COOKIE_DOMAIN, CSRF_COOKIE_PATH, false, 0));
   }
 
-  private Cookie prepareCookie(String name, String content, String domain, String path,
+  public String generateJwt(String subjectName) {
+    Date now = new Date();
+    return Jwts.builder()
+        .setSubject(subjectName)
+        .setIssuedAt(now)
+        .setExpiration(new Date(now.getTime() + JWT_EXPIRATION_TIME))
+        .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+        .compact();
+  }
+
+  public Cookie prepareCookie(String name, String content, String domain, String path,
       boolean httpOnly, int maxAge) {
     Cookie cookie = new Cookie(name, content);
     cookie.setDomain(domain);

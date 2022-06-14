@@ -1,10 +1,12 @@
 package com.mttbrt.digres.repository;
 
-import com.mttbrt.digres.domain.Item;
+import com.mttbrt.digres.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface UserDao extends JpaRepository<User, Long> {
+
+  User findByUsername(String username);
 
 }
