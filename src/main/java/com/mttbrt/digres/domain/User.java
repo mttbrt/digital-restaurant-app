@@ -1,7 +1,11 @@
 package com.mttbrt.digres.domain;
 
+import static com.mttbrt.digres.utils.StaticVariables.AUTHORITY_PREFIX;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -93,6 +97,16 @@ public class User {
 
   public void setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
+  }
+
+  public Set<String> getRoles() {
+    if (Objects.isNull(authorities)) {
+      return Set.of();
+    }
+
+    return authorities.stream()
+        .map(auth -> auth.getName().replace(AUTHORITY_PREFIX, ""))
+        .collect(Collectors.toSet());
   }
 
   public Set<ItemWithinOrder> getItemsWithinOrder() {
