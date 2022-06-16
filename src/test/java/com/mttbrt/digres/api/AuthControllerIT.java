@@ -1,6 +1,7 @@
 package com.mttbrt.digres.api;
 
 import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,11 +35,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.util.Base64Utils;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -48,6 +54,7 @@ public class AuthControllerIT {
 
   private static final String registerEndpoint = AUTH_ENDPOINT + REGISTER_ENDPOINT;
   private static final String logoutEndpoint = AUTH_ENDPOINT + LOGOUT_ENDPOINT;
+  private static final String loginEndpoint = AUTH_ENDPOINT + LOGIN_ENDPOINT;
 
   private static String JWT_COOKIE_NAME;
   private static String CSRF_COOKIE_NAME;
@@ -145,9 +152,9 @@ public class AuthControllerIT {
             .with(csrf())
             .cookie(userJWTCookie))
         .andExpect(status().isOk())
-        .andExpect(cookie().maxAge(JWT_COOKIE_NAME,0))
+        .andExpect(cookie().maxAge(JWT_COOKIE_NAME, 0))
         .andExpect(cookie().value(JWT_COOKIE_NAME, (String) null))
-        .andExpect(cookie().maxAge(CSRF_COOKIE_NAME,0))
+        .andExpect(cookie().maxAge(CSRF_COOKIE_NAME, 0))
         .andExpect(cookie().value(CSRF_COOKIE_NAME, (String) null));
   }
 
@@ -163,7 +170,28 @@ public class AuthControllerIT {
         .andExpect(content().json(objectMapper.writeValueAsString(res)));
   }
 
+  @Test
+  public void login_existing_user() throws Exception {
+    mockMvc.perform(post(loginEndpoint)
+            .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString("user:password".getBytes())))
+        .andExpect(status().isOk())
+        .andExpect(cookie().exists(JWT_COOKIE_NAME))
+        .andExpect(cookie().httpOnly(JWT_COOKIE_NAME, true));
+  }
 
+  @Test
+  public void login_non_existing_user() throws Exception {
+    mockMvc.perform(post(loginEndpoint)
+            .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString("user1:password".getBytes())))
+        .andExpect(status().isUnauthorized());
+  }
+
+  // TODO:
+  // - test login method [DONE]
+  // - improve errors' message and location
+  // - write little docs in readme merge into dev and master
+  // new branch:
+  // - users controller: addNewUser (which will be the same as register), deleteUser, addUserRole, removeUserRole
 
   private RegisterUserDTO createRegisterRequest(String username, String password,
       Set<Authority> authorities) {
