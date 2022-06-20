@@ -61,7 +61,7 @@ public class AuthControllerTest {
     final ResponseDTO expectedRes = new ResponseDTO(new ErrorDTO(
         HttpStatus.BAD_REQUEST.value(),
         "Incorrect request parameters.",
-        List.of(new SingleErrorDTO("Username cannot be blank.", "username"))));
+        List.of(new SingleErrorDTO("'username' cannot be blank."))));
 
     when(authService.registerUser(any(RegisterUserDTO.class))).thenReturn(expectedRes);
     ResponseEntity<?> responseEntity = authController.register(req);

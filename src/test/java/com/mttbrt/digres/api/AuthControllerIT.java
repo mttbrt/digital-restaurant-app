@@ -112,8 +112,7 @@ public class AuthControllerIT {
     RegisterUserDTO req = createRegisterRequest("user", "password", Set.of(staffAuthority));
     ResponseDTO res = new ResponseDTO(
         new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "User already exists.",
-            List.of(new SingleErrorDTO("An account with the given username already exists.",
-                registerEndpoint))));
+            List.of(new SingleErrorDTO("An account with the given username already exists."))));
 
     performPostRequest(registerEndpoint, adminJWTCookie, objectMapper.writeValueAsString(req),
         objectMapper.writeValueAsString(res), status().isBadRequest());
@@ -133,9 +132,9 @@ public class AuthControllerIT {
     ResponseDTO res = new ResponseDTO(
         new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Incorrect request parameters.",
             List.of(
-                new SingleErrorDTO("must not be blank", "password"),
-                new SingleErrorDTO("At least one role must be provided.", "roles"),
-                new SingleErrorDTO("must not be blank", "username")
+                new SingleErrorDTO("'password' cannot be blank."),
+                new SingleErrorDTO("'roles' please provide at least one role."),
+                new SingleErrorDTO("'username' cannot be blank.")
             )
         ));
 
@@ -162,7 +161,7 @@ public class AuthControllerIT {
   public void logout_non_logged_user() throws Exception {
     ResponseDTO res = new ResponseDTO(
         new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Request not valid.",
-            List.of(new SingleErrorDTO("The request is not valid.", ""))
+            List.of(new SingleErrorDTO("The request is not valid."))
         ));
 
     mockMvc.perform(post(logoutEndpoint).with(csrf()))
@@ -185,13 +184,6 @@ public class AuthControllerIT {
             .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString("user1:password".getBytes())))
         .andExpect(status().isUnauthorized());
   }
-
-  // TODO:
-  // - test login method [DONE]
-  // - improve errors' message and location
-  // - write little docs in readme merge into dev and master
-  // new branch:
-  // - users controller: addNewUser (which will be the same as register), deleteUser, addUserRole, removeUserRole
 
   private RegisterUserDTO createRegisterRequest(String username, String password,
       Set<Authority> authorities) {

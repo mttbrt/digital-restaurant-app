@@ -4,9 +4,9 @@ import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
 
+import com.mttbrt.digres.auth.AuthEntryPointJwt;
 import com.mttbrt.digres.config.filter.JWTAuthenticationFilter;
 import com.mttbrt.digres.config.filter.JWTLoginFilter;
-import com.mttbrt.digres.auth.AuthEntryPointJwt;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,23 +48,23 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .cors()
-      .and()
+        .and()
         .csrf()
         .ignoringAntMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT)
         .csrfTokenRepository(getCsrfTokenRepository())
-      .and()
+        .and()
         .exceptionHandling()
         .authenticationEntryPoint(authEntryPointJwt)
-      .and()
+        .and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
+        .and()
         .authorizeRequests()
         .antMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT, AUTH_ENDPOINT + LOGOUT_ENDPOINT)
         .permitAll()
         .anyRequest()
         .authenticated()
-      .and()
+        .and()
         .addFilterAfter(jwtLoginFilter(), ExceptionTranslationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter(), ExceptionTranslationFilter.class);
 

@@ -67,8 +67,7 @@ public class AuthServiceImplTest {
     final ResponseDTO expectedRes = new ResponseDTO(new ErrorDTO(
         HttpStatus.BAD_REQUEST.value(),
         "User already exists.",
-        List.of(new SingleErrorDTO("An account with the given username already exists.",
-        AUTH_ENDPOINT + REGISTER_ENDPOINT))));
+        List.of(new SingleErrorDTO("An account with the given username already exists."))));
 
     when(userDao.findByUsername(any(String.class))).thenReturn(new User());
     ResponseDTO responseEntity = authService.registerUser(req);

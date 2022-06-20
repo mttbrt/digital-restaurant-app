@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     ArrayList<SingleErrorDTO> errors = new ArrayList<>();
     e.getBindingResult().getFieldErrors().forEach(err -> errors.add(
-        new SingleErrorDTO(err.getDefaultMessage(), err.getField())));
+        new SingleErrorDTO("'" + err.getField() + "' " + err.getDefaultMessage())));
 
     ErrorDTO error = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Incorrect request parameters.",
         errors);

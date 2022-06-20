@@ -8,20 +8,14 @@ import javax.validation.constraints.NotBlank;
 @JsonInclude(Include.NON_NULL)
 public class SingleErrorDTO {
 
-  @NotBlank
+  @NotBlank(message = "cannot be blank.")
   private String message;
-  private String location;
 
   public SingleErrorDTO() {
   }
 
   public SingleErrorDTO(String message) {
-    this(message, null);
-  }
-
-  public SingleErrorDTO(String message, String location) {
     this.message = message;
-    this.location = location;
   }
 
   public String getMessage() {
@@ -30,14 +24,6 @@ public class SingleErrorDTO {
 
   public void setMessage(String message) {
     this.message = message;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
   }
 
   @Override
@@ -51,7 +37,6 @@ public class SingleErrorDTO {
 
     SingleErrorDTO that = (SingleErrorDTO) o;
 
-    return Objects.equals(message, that.getMessage())
-        && Objects.equals(location, that.getLocation());
+    return Objects.equals(message, that.getMessage());
   }
 }

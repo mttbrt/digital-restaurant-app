@@ -46,8 +46,7 @@ public class AuthServiceImpl implements AuthService {
     if (userDao.findByUsername(request.getUsername()) != null) {
       return createError(HttpStatus.BAD_REQUEST.value(),
           "User already exists.",
-          "An account with the given username already exists.",
-          reqPath);
+          "An account with the given username already exists.");
     }
 
     User newUser = new User(

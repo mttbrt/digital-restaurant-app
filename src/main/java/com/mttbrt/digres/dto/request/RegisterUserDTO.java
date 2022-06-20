@@ -7,15 +7,18 @@ import javax.validation.constraints.Size;
 
 public class RegisterUserDTO {
 
-  @NotBlank
-  @Size(min = 4, max = 32, message = "The length must be between 4 and 32 characters.")
+  @NotBlank(message = "cannot be blank.")
+  @Size(min = 4, max = 32, message = "length must be between 4 and 32 characters.")
   private String username;
-  @NotBlank
-  @Size(min = 8, max = 32, message = "The length must be between 8 and 32 characters.")
+  @NotBlank(message = "cannot be blank.")
+  @Size(min = 8, max = 32, message = "length must be between 8 and 32 characters.")
   private String password;
-  @NotNull
-  @Size(min = 1, message = "At least one role must be provided.")
-  private Set<@NotBlank @Size(min = 4, max = 32) String> roles;
+  @NotNull(message = "cannot be null.")
+  @Size(min = 1, message = "please provide at least one role.")
+  private Set
+      <@NotBlank(message = "cannot be blank.")
+      @Size(min = 4, max = 32, message = "length must be between 4 and 32.")
+          String> roles;
 
   public RegisterUserDTO() {
 

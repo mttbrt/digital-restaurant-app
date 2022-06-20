@@ -1,8 +1,5 @@
 package com.mttbrt.digres.api;
 
-import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
-import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
-
 import com.mttbrt.digres.dto.request.RegisterUserDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.service.AuthService;

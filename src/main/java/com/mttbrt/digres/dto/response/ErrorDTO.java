@@ -5,15 +5,14 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 public class ErrorDTO {
 
-  @NotBlank
+  @NotBlank(message = "cannot be blank.")
   private int code;
-  @NotBlank
+  @NotBlank(message = "cannot be blank.")
   private String message;
-  @NotNull
+  @NotNull(message = "cannot be null.")
   private List<@Valid SingleErrorDTO> errors;
 
   public ErrorDTO() {

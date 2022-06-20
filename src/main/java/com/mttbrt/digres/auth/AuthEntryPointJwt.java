@@ -24,8 +24,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     ResponseDTO res = createError(HttpStatus.BAD_REQUEST.value(),
         "Request not valid.",
-        "The request is not valid.",
-        request.getServletPath());
+        "The request is not valid.");
 
     final ObjectMapper mapper = new ObjectMapper();
     mapper.writeValue(response.getOutputStream(), res);

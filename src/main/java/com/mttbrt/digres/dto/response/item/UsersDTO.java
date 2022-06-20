@@ -1,6 +1,5 @@
 package com.mttbrt.digres.dto.response.item;
 
-import com.mttbrt.digres.dto.response.ResponseDTO;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -8,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class UsersDTO implements IItem {
 
-  @NotNull
+  @NotNull(message = "cannot be null.")
   private List<@Valid UserDTO> users;
 
   public UsersDTO() {

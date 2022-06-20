@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @JsonInclude(Include.NON_NULL)
 public class ResponseDTO {
 
-  @NotBlank
+  @NotBlank(message = "cannot be blank.")
   private String apiVersion;
   @Valid
   private IItem data;

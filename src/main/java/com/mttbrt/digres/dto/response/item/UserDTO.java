@@ -1,6 +1,5 @@
 package com.mttbrt.digres.dto.response.item;
 
-import com.mttbrt.digres.dto.response.ResponseDTO;
 import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
@@ -9,10 +8,13 @@ import javax.validation.constraints.Size;
 
 public class UserDTO {
 
-  @NotNull
+  @NotNull(message = "cannot be null.")
   private String username;
-  @NotNull
-  private Set<@NotBlank @Size(min = 4, max = 32) String> roles;
+  @NotNull(message = "cannot be null.")
+  private Set
+      <@NotBlank(message = "cannot be blank.")
+      @Size(min = 4, max = 32, message = "length must be between 4 and 32 characters.")
+          String> roles;
 
   public UserDTO() {
   }
