@@ -1,8 +1,8 @@
 package com.mttbrt.digres.exception;
 
-import com.mttbrt.digres.dto.response.ErrorDTO;
+import com.mttbrt.digres.dto.response.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorDTO;
+import com.mttbrt.digres.dto.response.SingleErrorResDTO;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -21,11 +21,11 @@ public class GlobalExceptionHandler {
   public ResponseDTO handleMethodArgumentNotValidException(
       MethodArgumentNotValidException e, HttpServletRequest req) {
 
-    ArrayList<SingleErrorDTO> errors = new ArrayList<>();
+    ArrayList<SingleErrorResDTO> errors = new ArrayList<>();
     e.getBindingResult().getFieldErrors().forEach(err -> errors.add(
-        new SingleErrorDTO(err.getDefaultMessage(), err.getField())));
+        new SingleErrorResDTO(err.getDefaultMessage(), err.getField())));
 
-    ErrorDTO error = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Incorrect request parameters.",
+    ErrorResDTO error = new ErrorResDTO(HttpStatus.BAD_REQUEST.value(), "Incorrect request parameters.",
         errors);
     return new ResponseDTO(error);
   }

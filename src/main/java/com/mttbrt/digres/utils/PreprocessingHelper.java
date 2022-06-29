@@ -1,8 +1,8 @@
 package com.mttbrt.digres.utils;
 
-import com.mttbrt.digres.dto.response.ErrorDTO;
+import com.mttbrt.digres.dto.response.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorDTO;
+import com.mttbrt.digres.dto.response.SingleErrorResDTO;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 
@@ -10,8 +10,8 @@ public class PreprocessingHelper {
 
   public static ResponseDTO createError(int code, String message, String errorMessage,
       String errorLocation) {
-    SingleErrorDTO singleError = new SingleErrorDTO(errorMessage, errorLocation);
-    ErrorDTO error = new ErrorDTO(code, message, List.of(singleError));
+    SingleErrorResDTO singleError = new SingleErrorResDTO(errorMessage, errorLocation);
+    ErrorResDTO error = new ErrorResDTO(code, message, List.of(singleError));
     return new ResponseDTO(error);
   }
 

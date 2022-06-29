@@ -1,6 +1,6 @@
 package com.mttbrt.digres.config;
 
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
 
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,7 +51,7 @@ public class SecurityConfig {
         .cors()
       .and()
         .csrf()
-        .ignoringAntMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT)
+        .ignoringAntMatchers(AUTH_NAMESPACE + LOGIN_ENDPOINT)
         .csrfTokenRepository(getCsrfTokenRepository())
       .and()
         .exceptionHandling()
@@ -60,8 +61,6 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
         .authorizeRequests()
-        .antMatchers(AUTH_ENDPOINT + LOGIN_ENDPOINT, AUTH_ENDPOINT + LOGOUT_ENDPOINT)
-        .permitAll()
         .anyRequest()
         .authenticated()
       .and()

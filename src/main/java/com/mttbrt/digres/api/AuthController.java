@@ -1,9 +1,6 @@
 package com.mttbrt.digres.api;
 
-import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
-import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
-
-import com.mttbrt.digres.dto.request.RegisterUserDTO;
+import com.mttbrt.digres.dto.request.UserReqDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.service.AuthService;
 import java.net.URI;
@@ -28,7 +25,7 @@ public class AuthController {
 
   @RolesAllowed("ADMIN")
   @PostMapping("/register")
-  public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO request) {
+  public ResponseEntity<?> register(@Valid @RequestBody UserReqDTO request) {
     ResponseDTO response = authService.registerUser(request);
     if (response.getError() != null) {
       return ResponseEntity.badRequest().body(response);

@@ -5,21 +5,20 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-public class ErrorDTO {
+public class ErrorResDTO {
 
   @NotBlank
   private int code;
   @NotBlank
   private String message;
   @NotNull
-  private List<@Valid SingleErrorDTO> errors;
+  private List<@Valid SingleErrorResDTO> errors;
 
-  public ErrorDTO() {
+  public ErrorResDTO() {
   }
 
-  public ErrorDTO(int code, String message, List<@Valid SingleErrorDTO> errors) {
+  public ErrorResDTO(int code, String message, List<@Valid SingleErrorResDTO> errors) {
     this.code = code;
     this.message = message;
     this.errors = errors;
@@ -41,11 +40,11 @@ public class ErrorDTO {
     this.message = message;
   }
 
-  public List<SingleErrorDTO> getErrors() {
+  public List<SingleErrorResDTO> getErrors() {
     return errors;
   }
 
-  public void setErrors(List<SingleErrorDTO> errors) {
+  public void setErrors(List<SingleErrorResDTO> errors) {
     this.errors = errors;
   }
 
@@ -58,7 +57,7 @@ public class ErrorDTO {
       return false;
     }
 
-    ErrorDTO that = (ErrorDTO) o;
+    ErrorResDTO that = (ErrorResDTO) o;
 
     return Objects.equals(code, that.getCode())
         && Objects.equals(message, that.getMessage())

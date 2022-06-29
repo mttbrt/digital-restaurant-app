@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.mttbrt.digres.dto.request.RegisterUserDTO;
-import com.mttbrt.digres.dto.response.ErrorDTO;
+import com.mttbrt.digres.dto.request.UserReqDTO;
+import com.mttbrt.digres.dto.response.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorDTO;
+import com.mttbrt.digres.dto.response.SingleErrorResDTO;
 import com.mttbrt.digres.dto.response.item.IItem;
-import com.mttbrt.digres.dto.response.item.UserDTO;
-import com.mttbrt.digres.dto.response.item.UsersDTO;
+import com.mttbrt.digres.dto.response.item.UserResDTO;
+import com.mttbrt.digres.dto.response.item.UsersResDTO;
 import com.mttbrt.digres.service.impl.AuthServiceImpl;
 import java.net.URI;
 import java.util.List;
@@ -35,19 +35,19 @@ public class AuthControllerTest {
 
   private final String username;
   private final Set<String> roles;
-  private final RegisterUserDTO req;
+  private final UserReqDTO req;
 
   public AuthControllerTest() {
     username = "user";
     roles = Set.of("ROLE_STAFF");
-    req = new RegisterUserDTO(username, "password", roles);
+    req = new UserReqDTO(username, "password", roles);
   }
 
   @Test
   void register_new_user_successfully() {
-    final ResponseDTO expectedRes = new ResponseDTO(new UsersDTO(List.of(new UserDTO(username, roles))));
+    final ResponseDTO expectedRes = new ResponseDTO(new UsersResDTO(List.of(new UserResDTO(username, roles))));
 
-    when(authService.registerUser(any(RegisterUserDTO.class))).thenReturn(expectedRes);
+    when(authService.registerUser(any(UserReqDTO.class))).thenReturn(expectedRes);
     ResponseEntity<?> responseEntity = authController.register(req);
 
     assertThat(responseEntity.getStatusCodeValue()).isEqualTo(HttpStatus.CREATED.value());
@@ -58,12 +58,12 @@ public class AuthControllerTest {
 
   @Test
   void bad_request_while_registering_new_user() {
-    final ResponseDTO expectedRes = new ResponseDTO(new ErrorDTO(
+    final ResponseDTO expectedRes = new ResponseDTO(new ErrorResDTO(
         HttpStatus.BAD_REQUEST.value(),
         "Incorrect request parameters.",
-        List.of(new SingleErrorDTO("Username cannot be blank.", "username"))));
+        List.of(new SingleErrorResDTO("Username cannot be blank.", "username"))));
 
-    when(authService.registerUser(any(RegisterUserDTO.class))).thenReturn(expectedRes);
+    when(authService.registerUser(any(UserReqDTO.class))).thenReturn(expectedRes);
     ResponseEntity<?> responseEntity = authController.register(req);
 
     assertThat(responseEntity.getStatusCodeValue()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -75,7 +75,7 @@ public class AuthControllerTest {
   void internal_server_error_while_registering_new_user() {
     final ResponseDTO expectedRes = new ResponseDTO((IItem) null);
 
-    when(authService.registerUser(any(RegisterUserDTO.class))).thenReturn(expectedRes);
+    when(authService.registerUser(any(UserReqDTO.class))).thenReturn(expectedRes);
     ResponseEntity<?> responseEntity = authController.register(req);
 
     assertThat(responseEntity.getStatusCodeValue()).isEqualTo(

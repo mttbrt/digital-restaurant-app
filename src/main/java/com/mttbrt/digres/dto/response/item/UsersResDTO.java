@@ -1,28 +1,27 @@
 package com.mttbrt.digres.dto.response.item;
 
-import com.mttbrt.digres.dto.response.ResponseDTO;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class UsersDTO implements IItem {
+public class UsersResDTO implements IItem {
 
   @NotNull
-  private List<@Valid UserDTO> users;
+  private List<@Valid UserResDTO> users;
 
-  public UsersDTO() {
+  public UsersResDTO() {
   }
 
-  public UsersDTO(List<@Valid UserDTO> users) {
+  public UsersResDTO(List<@Valid UserResDTO> users) {
     this.users = users;
   }
 
-  public List<UserDTO> getUsers() {
+  public List<UserResDTO> getUsers() {
     return users;
   }
 
-  public void setUsers(List<UserDTO> users) {
+  public void setUsers(List<UserResDTO> users) {
     this.users = users;
   }
 
@@ -35,7 +34,7 @@ public class UsersDTO implements IItem {
       return false;
     }
 
-    UsersDTO that = (UsersDTO) o;
+    UsersResDTO that = (UsersResDTO) o;
 
     return Objects.equals(users, that.getUsers());
   }

@@ -1,6 +1,6 @@
 package com.mttbrt.digres.config.filter;
 
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -10,20 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
   private JWTHelper jwtHelper;
 
   public JWTLoginFilter(AuthenticationManager authManager) {
-    super(new AntPathRequestMatcher(AUTH_ENDPOINT + LOGIN_ENDPOINT));
+    super(new AntPathRequestMatcher(AUTH_NAMESPACE + LOGIN_ENDPOINT, HttpMethod.POST.toString()));
     super.setAuthenticationManager(authManager);
   }
 

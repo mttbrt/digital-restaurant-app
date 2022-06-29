@@ -6,20 +6,20 @@ import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 
 @JsonInclude(Include.NON_NULL)
-public class SingleErrorDTO {
+public class SingleErrorResDTO {
 
   @NotBlank
   private String message;
   private String location;
 
-  public SingleErrorDTO() {
+  public SingleErrorResDTO() {
   }
 
-  public SingleErrorDTO(String message) {
+  public SingleErrorResDTO(String message) {
     this(message, null);
   }
 
-  public SingleErrorDTO(String message, String location) {
+  public SingleErrorResDTO(String message, String location) {
     this.message = message;
     this.location = location;
   }
@@ -49,7 +49,7 @@ public class SingleErrorDTO {
       return false;
     }
 
-    SingleErrorDTO that = (SingleErrorDTO) o;
+    SingleErrorResDTO that = (SingleErrorResDTO) o;
 
     return Objects.equals(message, that.getMessage())
         && Objects.equals(location, that.getLocation());

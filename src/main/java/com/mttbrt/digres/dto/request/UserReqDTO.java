@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class RegisterUserDTO {
+public class UserReqDTO {
 
   @NotBlank
   @Size(min = 4, max = 32, message = "The length must be between 4 and 32 characters.")
@@ -17,11 +17,11 @@ public class RegisterUserDTO {
   @Size(min = 1, message = "At least one role must be provided.")
   private Set<@NotBlank @Size(min = 4, max = 32) String> roles;
 
-  public RegisterUserDTO() {
+  public UserReqDTO() {
 
   }
 
-  public RegisterUserDTO(String username, String password,
+  public UserReqDTO(String username, String password,
       Set<@NotBlank @Size(min = 4, max = 32) String> roles) {
     this.username = username;
     this.password = password;
@@ -50,5 +50,14 @@ public class RegisterUserDTO {
 
   public void setRoles(Set<String> roles) {
     this.roles = roles;
+  }
+
+  @Override
+  public String toString() {
+    return "AddUserDTO{" +
+        "username='" + username + '\'' +
+        ", password='" + password + '\'' +
+        ", roles=" + roles +
+        '}';
   }
 }

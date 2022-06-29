@@ -19,7 +19,7 @@ public class ResponseDTO {
   @Valid
   private IItem data;
   @Valid
-  private ErrorDTO error;
+  private ErrorResDTO error;
 
   public ResponseDTO() {
   }
@@ -28,11 +28,11 @@ public class ResponseDTO {
     this(API_VERSION, data, null);
   }
 
-  public ResponseDTO(ErrorDTO error) {
+  public ResponseDTO(ErrorResDTO error) {
     this(API_VERSION, null, error);
   }
 
-  public ResponseDTO(String apiVersion, IItem data, ErrorDTO error) {
+  public ResponseDTO(String apiVersion, IItem data, ErrorResDTO error) {
     this.apiVersion = apiVersion;
     this.data = data;
     this.error = error;
@@ -54,11 +54,11 @@ public class ResponseDTO {
     this.data = data;
   }
 
-  public ErrorDTO getError() {
+  public ErrorResDTO getError() {
     return error;
   }
 
-  public void setError(ErrorDTO error) {
+  public void setError(ErrorResDTO error) {
     this.error = error;
   }
 

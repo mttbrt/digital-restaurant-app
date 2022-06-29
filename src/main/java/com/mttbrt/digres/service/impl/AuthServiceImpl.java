@@ -2,15 +2,15 @@ package com.mttbrt.digres.service.impl;
 
 import static com.mttbrt.digres.utils.PreprocessingHelper.createError;
 import static com.mttbrt.digres.utils.StaticVariables.AUTHORITY_PREFIX;
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
 
 import com.mttbrt.digres.domain.Authority;
 import com.mttbrt.digres.domain.User;
-import com.mttbrt.digres.dto.request.RegisterUserDTO;
+import com.mttbrt.digres.dto.request.UserReqDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.item.UserDTO;
-import com.mttbrt.digres.dto.response.item.UsersDTO;
+import com.mttbrt.digres.dto.response.item.UserResDTO;
+import com.mttbrt.digres.dto.response.item.UsersResDTO;
 import com.mttbrt.digres.repository.AuthorityDao;
 import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.service.AuthService;
@@ -40,8 +40,8 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public ResponseDTO registerUser(RegisterUserDTO request) {
-    String reqPath = AUTH_ENDPOINT + REGISTER_ENDPOINT;
+  public ResponseDTO registerUser(UserReqDTO request) {
+    String reqPath = AUTH_NAMESPACE + REGISTER_ENDPOINT;
 
     if (userDao.findByUsername(request.getUsername()) != null) {
       return createError(HttpStatus.BAD_REQUEST.value(),
@@ -56,8 +56,8 @@ public class AuthServiceImpl implements AuthService {
         getAuthorities(request.getRoles()));
     userDao.save(newUser);
 
-    List<UserDTO> users = List.of(new UserDTO(request.getUsername(), request.getRoles()));
-    UsersDTO data = new UsersDTO(users);
+    List<UserResDTO> users = List.of(new UserResDTO(request.getUsername(), request.getRoles()));
+    UsersResDTO data = new UsersResDTO(users);
     return new ResponseDTO(data);
   }
 

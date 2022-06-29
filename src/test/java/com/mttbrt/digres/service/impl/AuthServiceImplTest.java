@@ -1,18 +1,18 @@
 package com.mttbrt.digres.service.impl;
 
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.mttbrt.digres.domain.User;
-import com.mttbrt.digres.dto.request.RegisterUserDTO;
-import com.mttbrt.digres.dto.response.ErrorDTO;
+import com.mttbrt.digres.dto.request.UserReqDTO;
+import com.mttbrt.digres.dto.response.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorDTO;
-import com.mttbrt.digres.dto.response.item.UserDTO;
-import com.mttbrt.digres.dto.response.item.UsersDTO;
+import com.mttbrt.digres.dto.response.SingleErrorResDTO;
+import com.mttbrt.digres.dto.response.item.UserResDTO;
+import com.mttbrt.digres.dto.response.item.UsersResDTO;
 import com.mttbrt.digres.repository.AuthorityDao;
 import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.utils.JWTHelper;
@@ -44,17 +44,17 @@ public class AuthServiceImplTest {
 
   private final String username;
   private final Set<String> roles;
-  private final RegisterUserDTO req;
+  private final UserReqDTO req;
 
   public AuthServiceImplTest() {
     username = "user";
     roles = Set.of("ROLE_STAFF");
-    req = new RegisterUserDTO(username, "password", roles);
+    req = new UserReqDTO(username, "password", roles);
   }
 
   @Test
   void register_non_existing_user() {
-    final ResponseDTO expectedRes = new ResponseDTO(new UsersDTO(List.of(new UserDTO(username, roles))));
+    final ResponseDTO expectedRes = new ResponseDTO(new UsersResDTO(List.of(new UserResDTO(username, roles))));
 
     when(userDao.findByUsername(any(String.class))).thenReturn(null);
     ResponseDTO responseEntity = authService.registerUser(req);
@@ -64,11 +64,11 @@ public class AuthServiceImplTest {
 
   @Test
   void register_existing_user() {
-    final ResponseDTO expectedRes = new ResponseDTO(new ErrorDTO(
+    final ResponseDTO expectedRes = new ResponseDTO(new ErrorResDTO(
         HttpStatus.BAD_REQUEST.value(),
         "User already exists.",
-        List.of(new SingleErrorDTO("An account with the given username already exists.",
-        AUTH_ENDPOINT + REGISTER_ENDPOINT))));
+        List.of(new SingleErrorResDTO("An account with the given username already exists.",
+        AUTH_NAMESPACE + REGISTER_ENDPOINT))));
 
     when(userDao.findByUsername(any(String.class))).thenReturn(new User());
     ResponseDTO responseEntity = authService.registerUser(req);
