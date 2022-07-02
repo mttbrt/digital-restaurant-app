@@ -1,4 +1,4 @@
-package com.mttbrt.digres.dto.response;
+package com.mttbrt.digres.dto.response.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

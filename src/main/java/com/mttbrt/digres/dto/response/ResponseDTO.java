@@ -4,8 +4,9 @@ import static com.mttbrt.digres.utils.StaticVariables.API_VERSION;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.mttbrt.digres.dto.response.item.IItem;
-import com.mttbrt.digres.dto.response.validation.ValidResponseDTO;
+import com.mttbrt.digres.dto.response.data.item.IItem;
+import com.mttbrt.digres.dto.response.error.ErrorResDTO;
+import com.mttbrt.digres.dto.response.data.validation.ValidResponseDTO;
 import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.mttbrt.digres.dto.response.validation;
+package com.mttbrt.digres.dto.response.data.validation;
 
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import javax.validation.ConstraintValidator;

@@ -3,7 +3,7 @@ package com.mttbrt.digres.api;
 import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
-import static com.mttbrt.digres.utils.StaticVariables.REGISTER_ENDPOINT;
+import static com.mttbrt.digres.utils.StaticVariables.USERS_ENDPOINT;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,12 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mttbrt.digres.domain.Authority;
 import com.mttbrt.digres.domain.User;
-import com.mttbrt.digres.dto.request.UserReqDTO;
-import com.mttbrt.digres.dto.response.ErrorResDTO;
+import com.mttbrt.digres.dto.request.AddUserReqDTO;
+import com.mttbrt.digres.dto.response.error.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorResDTO;
-import com.mttbrt.digres.dto.response.item.UserResDTO;
-import com.mttbrt.digres.dto.response.item.UsersResDTO;
+import com.mttbrt.digres.dto.response.error.SingleErrorResDTO;
+import com.mttbrt.digres.dto.response.data.item.UserResDTO;
+import com.mttbrt.digres.dto.response.data.item.UsersResDTO;
 import com.mttbrt.digres.repository.AuthorityDao;
 import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.utils.JWTHelper;
@@ -49,9 +49,9 @@ import org.springframework.util.Base64Utils;
 @TestInstance(Lifecycle.PER_CLASS)
 public class AuthControllerIT {
 
-  private static final String registerEndpoint = AUTH_NAMESPACE + REGISTER_ENDPOINT;
-  private static final String logoutEndpoint = AUTH_NAMESPACE + LOGOUT_ENDPOINT;
-  private static final String loginEndpoint = AUTH_NAMESPACE + LOGIN_ENDPOINT;
+  private static final String registerEndpoint = USERS_ENDPOINT;
+  private static final String logoutEndpoint = LOGOUT_ENDPOINT;
+  private static final String loginEndpoint = LOGIN_ENDPOINT;
 
   private static String JWT_COOKIE_NAME;
   private static String CSRF_COOKIE_NAME;
@@ -93,7 +93,7 @@ public class AuthControllerIT {
 
   @Test
   public void register_new_user_successfully() throws Exception {
-    UserReqDTO req = createRegisterRequest("test", "password", Set.of(staffAuthority));
+    AddUserReqDTO req = createRegisterRequest("test", "password", Set.of(staffAuthority));
     ResponseDTO res = new ResponseDTO(
         new UsersResDTO(List.of(new UserResDTO(req.getUsername(), req.getRoles()))));
 
@@ -106,7 +106,7 @@ public class AuthControllerIT {
 
   @Test
   public void register_existing_user() throws Exception {
-    UserReqDTO req = createRegisterRequest("user", "password", Set.of(staffAuthority));
+    AddUserReqDTO req = createRegisterRequest("user", "password", Set.of(staffAuthority));
     ResponseDTO res = new ResponseDTO(
         new ErrorResDTO(HttpStatus.BAD_REQUEST.value(), "User already exists.",
             List.of(new SingleErrorResDTO("An account with the given username already exists.",
@@ -118,7 +118,7 @@ public class AuthControllerIT {
 
   @Test
   public void register_user_as_non_admin() throws Exception {
-    UserReqDTO req = createRegisterRequest("user", "password", Set.of(staffAuthority));
+    AddUserReqDTO req = createRegisterRequest("user", "password", Set.of(staffAuthority));
 
     performPostRequest(registerEndpoint, userJWTCookie, objectMapper.writeValueAsString(req), null,
         status().isForbidden());
@@ -126,7 +126,7 @@ public class AuthControllerIT {
 
   @Test
   public void register_user_with_malformed_input() throws Exception {
-    UserReqDTO req = createRegisterRequest("user", "password", null);
+    AddUserReqDTO req = createRegisterRequest("user", "password", null);
     ResponseDTO res = new ResponseDTO(
         new ErrorResDTO(HttpStatus.BAD_REQUEST.value(), "Incorrect request parameters.",
             List.of(
@@ -190,10 +190,10 @@ public class AuthControllerIT {
   // new branch:
   // - users controller: addNewUser (which will be the same as register), deleteUser, addUserRole, removeUserRole
 
-  private UserReqDTO createRegisterRequest(String username, String password,
+  private AddUserReqDTO createRegisterRequest(String username, String password,
       Set<Authority> authorities) {
     User user = new User(username, password, authorities);
-    return new UserReqDTO(user.getUsername(), user.getPassword(), user.getRoles());
+    return new AddUserReqDTO(user.getUsername(), user.getPassword(), user.getRoles());
   }
 
   private void performPostRequest(String endpoint, Cookie jwtCookie, String reqContent,

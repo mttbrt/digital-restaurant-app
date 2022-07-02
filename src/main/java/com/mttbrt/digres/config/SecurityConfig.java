@@ -51,7 +51,7 @@ public class SecurityConfig {
         .cors()
       .and()
         .csrf()
-        .ignoringAntMatchers(AUTH_NAMESPACE + LOGIN_ENDPOINT)
+        .ignoringAntMatchers(LOGIN_ENDPOINT)
         .csrfTokenRepository(getCsrfTokenRepository())
       .and()
         .exceptionHandling()

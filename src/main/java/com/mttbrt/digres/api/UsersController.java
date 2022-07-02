@@ -1,7 +1,12 @@
 package com.mttbrt.digres.api;
 
-import com.mttbrt.digres.dto.request.UserReqDTO;
-import com.mttbrt.digres.service.AuthService;
+import static com.mttbrt.digres.utils.StaticVariables.USERS_ENDPOINT;
+
+import com.mttbrt.digres.dto.request.AddUserReqDTO;
+import com.mttbrt.digres.dto.request.UpdateUserReqDTO;
+import com.mttbrt.digres.dto.response.ResponseDTO;
+import com.mttbrt.digres.service.UserService;
+import java.net.URI;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,43 +20,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RolesAllowed("ADMIN")
 @RequestMapping("/api/v1/users")
 public class UsersController {
 
-  private final AuthService authService;
+  private final UserService userService;
 
-  public UsersController(AuthService authService) {
-    this.authService = authService;
+  public UsersController(UserService userService) {
+    this.userService = userService;
   }
 
-  @RolesAllowed({"STAFF", "ADMIN"})
   @GetMapping()
   public ResponseEntity<?> getUsers() {
-    return ResponseEntity.ok().body("get users");
+    return ResponseEntity.ok().body(userService.getUsers());
   }
 
-  @RolesAllowed("ADMIN")
   @PostMapping()
-  public ResponseEntity<?> addUser(@Valid @RequestBody UserReqDTO request) {
-    return ResponseEntity.ok().body("add user: " + request);
+  public ResponseEntity<?> addUser(@Valid @RequestBody AddUserReqDTO request) {
+    ResponseDTO response = userService.addUser(request);
+    if (response.getError() != null) {
+      return ResponseEntity.badRequest().body(response);
+    } else if (response.getData() != null) {
+      return ResponseEntity.created(URI.create(USERS_ENDPOINT + '/' + request.getUsername())).body(response);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
-  @RolesAllowed({"STAFF", "ADMIN"})
-  @GetMapping("/{id}")
-  public ResponseEntity<?> getUser(@PathVariable Long id) {
-    return ResponseEntity.ok().body("get user: " + id);
+  @GetMapping("/{username}")
+  public ResponseEntity<?> getUser(@PathVariable String username) {
+    ResponseDTO response = userService.getUserByUsername(username);
+    if (response.getError() != null) {
+      return ResponseEntity.badRequest().body(response);
+    } else if (response.getData() != null) {
+      return ResponseEntity.ok().body(response);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
-  @RolesAllowed("ADMIN")
-  @PutMapping("/{id}")
-  public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UserReqDTO request) {
-    return ResponseEntity.ok().body("update user: " + id + " - " + request);
+  @PutMapping("/{username}")
+  public ResponseEntity<?> updateUser(@PathVariable String username,
+      @Valid @RequestBody UpdateUserReqDTO request) {
+    ResponseDTO response = userService.updateUser(username, request);
+    if (response.getError() != null) {
+      return ResponseEntity.badRequest().body(response);
+    } else if (response.getData() != null) {
+      return ResponseEntity.ok().body(response);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
-  @RolesAllowed("ADMIN")
-  @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-    return ResponseEntity.ok().body("delete user: " + id);
+  @DeleteMapping("/{username}")
+  public ResponseEntity<?> deleteUser(@PathVariable String username) {
+    ResponseDTO response = userService.deleteUser(username);
+    if (response.getError() != null) {
+      return ResponseEntity.badRequest().body(response);
+    } else if (response.getData() != null) {
+      return ResponseEntity.ok().body(response);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
 }

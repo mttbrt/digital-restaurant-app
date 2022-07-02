@@ -1,4 +1,4 @@
-package com.mttbrt.digres.dto.response;
+package com.mttbrt.digres.dto.response.error;
 
 import java.util.List;
 import java.util.Objects;

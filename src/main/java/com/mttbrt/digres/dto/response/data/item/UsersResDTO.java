@@ -1,4 +1,4 @@
-package com.mttbrt.digres.dto.response.item;
+package com.mttbrt.digres.dto.response.data.item;
 
 import java.util.List;
 import java.util.Objects;

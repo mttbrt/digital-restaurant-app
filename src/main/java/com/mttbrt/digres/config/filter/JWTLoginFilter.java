@@ -23,7 +23,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
   private JWTHelper jwtHelper;
 
   public JWTLoginFilter(AuthenticationManager authManager) {
-    super(new AntPathRequestMatcher(AUTH_NAMESPACE + LOGIN_ENDPOINT, HttpMethod.POST.toString()));
+    super(new AntPathRequestMatcher(LOGIN_ENDPOINT, HttpMethod.POST.toString()));
     super.setAuthenticationManager(authManager);
   }
 

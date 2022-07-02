@@ -1,8 +1,8 @@
 package com.mttbrt.digres.exception;
 
-import com.mttbrt.digres.dto.response.ErrorResDTO;
+import com.mttbrt.digres.dto.response.error.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
-import com.mttbrt.digres.dto.response.SingleErrorResDTO;
+import com.mttbrt.digres.dto.response.error.SingleErrorResDTO;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
