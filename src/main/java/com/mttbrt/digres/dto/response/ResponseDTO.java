@@ -79,4 +79,12 @@ public class ResponseDTO {
         && Objects.equals(error, that.getError());
   }
 
+  @Override
+  public String toString() {
+    return "ResponseDTO{" +
+        "apiVersion='" + apiVersion + '\'' +
+        ", data=" + data +
+        ", error=" + error +
+        '}';
+  }
 }

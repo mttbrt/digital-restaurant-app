@@ -63,4 +63,13 @@ public class ErrorResDTO {
         && Objects.equals(message, that.getMessage())
         && Objects.equals(errors, that.getErrors());
   }
+
+  @Override
+  public String toString() {
+    return "ErrorResDTO{" +
+        "code=" + code +
+        ", message='" + message + '\'' +
+        ", errors=" + errors +
+        '}';
+  }
 }

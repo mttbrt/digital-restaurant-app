@@ -54,4 +54,12 @@ public class SingleErrorResDTO {
     return Objects.equals(message, that.getMessage())
         && Objects.equals(location, that.getLocation());
   }
+
+  @Override
+  public String toString() {
+    return "SingleErrorResDTO{" +
+        "message='" + message + '\'' +
+        ", location='" + location + '\'' +
+        '}';
+  }
 }

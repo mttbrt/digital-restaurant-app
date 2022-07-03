@@ -51,4 +51,12 @@ public class UserResDTO {
     return Objects.equals(username, that.getUsername())
         && Objects.equals(roles, that.getRoles());
   }
+
+  @Override
+  public String toString() {
+    return "UserResDTO{" +
+        "username='" + username + '\'' +
+        ", roles=" + roles +
+        '}';
+  }
 }

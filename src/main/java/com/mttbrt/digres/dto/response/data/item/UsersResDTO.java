@@ -38,4 +38,11 @@ public class UsersResDTO implements IItem {
 
     return Objects.equals(users, that.getUsers());
   }
+
+  @Override
+  public String toString() {
+    return "UsersResDTO{" +
+        "users=" + users +
+        '}';
+  }
 }
