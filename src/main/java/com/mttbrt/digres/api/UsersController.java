@@ -7,9 +7,19 @@ import com.mttbrt.digres.dto.request.UpdateUserReqDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.service.UserService;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import org.hibernate.internal.util.ZonedDateTimeComparator;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +42,20 @@ public class UsersController {
 
   @GetMapping()
   public ResponseEntity<?> getUsers() {
-    return ResponseEntity.ok().body(userService.getUsers());
+    return ResponseEntity.ok()
+        .lastModified(System.currentTimeMillis())
+        .body(userService.getUsers());
+  }
+
+  @GetMapping("/{userId}")
+  public ResponseEntity<?> getUser(@PathVariable String userId) {
+    ResponseDTO response = userService.getUserByUsername(userId);
+    if (response.getError() != null) {
+      return ResponseEntity.badRequest().body(response);
+    } else if (response.getData() != null) {
+      return ResponseEntity.ok().body(response);
+    }
+    return ResponseEntity.internalServerError().build();
   }
 
   @PostMapping()
@@ -42,17 +65,6 @@ public class UsersController {
       return ResponseEntity.badRequest().body(response);
     } else if (response.getData() != null) {
       return ResponseEntity.created(URI.create(USERS_ENDPOINT + '/' + request.getUsername())).body(response);
-    }
-    return ResponseEntity.internalServerError().build();
-  }
-
-  @GetMapping("/{username}")
-  public ResponseEntity<?> getUser(@PathVariable String username) {
-    ResponseDTO response = userService.getUserByUsername(username);
-    if (response.getError() != null) {
-      return ResponseEntity.badRequest().body(response);
-    } else if (response.getData() != null) {
-      return ResponseEntity.ok().body(response);
     }
     return ResponseEntity.internalServerError().build();
   }
