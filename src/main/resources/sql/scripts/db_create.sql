@@ -1,3 +1,11 @@
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $update_modified_column$
+BEGIN
+  NEW.modified = now();
+  RETURN NEW;
+END;
+$update_modified_column$ language 'plpgsql';
+
 CREATE TABLE "tbl_category" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar(100) UNIQUE NOT NULL
@@ -41,8 +49,10 @@ CREATE TABLE "tbl_session" (
 CREATE TABLE "tbl_user" (
   "id" SERIAL PRIMARY KEY,
   "username" varchar(100) UNIQUE NOT NULL,
-  "password" varchar(100) NOT NULL
+  "password" varchar(100) NOT NULL,
+  "modified" timestamptz NOT NULL DEFAULT NOW()::TIMESTAMPTZ
 );
+CREATE TRIGGER update_user_modtime BEFORE UPDATE ON tbl_user FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 
 CREATE TABLE "tbl_authority" (
   "id" SERIAL PRIMARY KEY,

@@ -3,6 +3,7 @@ package com.mttbrt.digres.domain;
 import static com.mttbrt.digres.utils.StaticVariables.AUTHORITY_PREFIX;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,9 @@ public class User {
 
   @Column(name = "password", nullable = false, length = 100)
   private String password;
+
+  @Column(name = "modified", nullable = false)
+  private OffsetDateTime modified;
 
   @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "takenBy")
@@ -97,6 +101,14 @@ public class User {
 
   public void setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
+  }
+
+  public OffsetDateTime getModified() {
+    return modified;
+  }
+
+  public void setModified(OffsetDateTime modified) {
+    this.modified = modified;
   }
 
   public Set<String> getRoles() {

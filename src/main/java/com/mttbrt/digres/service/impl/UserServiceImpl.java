@@ -1,7 +1,6 @@
 package com.mttbrt.digres.service.impl;
 
 import static com.mttbrt.digres.utils.PreprocessingHelper.createError;
-import static com.mttbrt.digres.utils.StaticVariables.API_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.AUTHORITY_PREFIX;
 import static com.mttbrt.digres.utils.StaticVariables.USERS_ENDPOINT;
 
@@ -15,9 +14,11 @@ import com.mttbrt.digres.dto.response.data.item.UsersResDTO;
 import com.mttbrt.digres.repository.AuthorityDao;
 import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.service.UserService;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,13 +40,18 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public ResponseDTO getUsers() {
+    AtomicReference<OffsetDateTime> latestModified = new AtomicReference<>(OffsetDateTime.MIN);
     List<UserResDTO> userList = userDao.findAll()
         .stream()
-        .map(user -> new UserResDTO(user.getUsername(), user.getRoles()))
+        .map(user -> {
+          if (user.getModified().isAfter(latestModified.get()))
+            latestModified.set(user.getModified());
+          return new UserResDTO(user.getUsername(), user.getRoles());
+        })
         .collect(Collectors.toList());
     UsersResDTO userRes = new UsersResDTO(userList);
 
-    return new ResponseDTO(userRes);
+    return new ResponseDTO(userRes, latestModified.get().isAfter(OffsetDateTime.MIN) ? latestModified.get() : OffsetDateTime.now());
   }
 
   @Override
@@ -80,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     List<UserResDTO> users = List.of(new UserResDTO(user.getUsername(), user.getRoles()));
     UsersResDTO data = new UsersResDTO(users);
-    return new ResponseDTO(data);
+    return new ResponseDTO(data, user.getModified());
   }
 
   @Override
@@ -99,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     List<UserResDTO> users = List.of(new UserResDTO(username, request.getRoles()));
     UsersResDTO data = new UsersResDTO(users);
-    return new ResponseDTO(data);
+    return new ResponseDTO(data, user.getModified());
   }
 
   @Override
@@ -115,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
     List<UserResDTO> users = List.of(new UserResDTO(user.getUsername(), user.getRoles()));
     UsersResDTO data = new UsersResDTO(users);
-    return new ResponseDTO(data);
+    return new ResponseDTO(data, user.getModified());
   }
 
   private Set<Authority> getAuthorities(Set<String> roles) {

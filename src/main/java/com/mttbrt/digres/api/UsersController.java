@@ -8,8 +8,10 @@ import com.mttbrt.digres.dto.response.ResponseDTO;
 import com.mttbrt.digres.service.UserService;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.security.RolesAllowed;
@@ -42,10 +44,13 @@ public class UsersController {
 
   @GetMapping()
   public ResponseEntity<?> getUsers() {
+    ResponseDTO response = userService.getUsers();
     return ResponseEntity.ok()
-        .lastModified(System.currentTimeMillis())
-        .body(userService.getUsers());
+        .lastModified(response.getModified())
+        .body(response);
   }
+
+  // TODO: add lastModified to all methods below, getUserById, check response content when an error occurs.
 
   @GetMapping("/{userId}")
   public ResponseEntity<?> getUser(@PathVariable String userId) {
@@ -53,7 +58,9 @@ public class UsersController {
     if (response.getError() != null) {
       return ResponseEntity.badRequest().body(response);
     } else if (response.getData() != null) {
-      return ResponseEntity.ok().body(response);
+      return ResponseEntity.ok()
+          .lastModified(response.getModified())
+          .body(response);
     }
     return ResponseEntity.internalServerError().build();
   }
