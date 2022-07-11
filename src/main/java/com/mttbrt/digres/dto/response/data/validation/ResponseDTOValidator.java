@@ -11,7 +11,8 @@ public class ResponseDTOValidator implements ConstraintValidator<ValidResponseDT
   }
 
   @Override
-  public boolean isValid(ResponseDTO responseDTO, ConstraintValidatorContext constraintValidatorContext) {
+  public boolean isValid(ResponseDTO responseDTO,
+      ConstraintValidatorContext constraintValidatorContext) {
     return responseDTO.getData() == null ^ responseDTO.getError() == null;
   }
 }

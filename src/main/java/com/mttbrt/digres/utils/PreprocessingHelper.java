@@ -1,7 +1,7 @@
 package com.mttbrt.digres.utils;
 
-import com.mttbrt.digres.dto.response.error.ErrorResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
+import com.mttbrt.digres.dto.response.error.ErrorResDTO;
 import com.mttbrt.digres.dto.response.error.SingleErrorResDTO;
 import java.util.List;
 import org.springframework.http.HttpStatus;

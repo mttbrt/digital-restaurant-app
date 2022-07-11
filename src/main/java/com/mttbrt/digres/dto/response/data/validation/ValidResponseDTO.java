@@ -12,7 +12,7 @@ import javax.validation.Payload;
 @Documented
 @Target(TYPE)
 @Retention(RUNTIME)
-@Constraint(validatedBy = { ResponseDTOValidator.class })
+@Constraint(validatedBy = {ResponseDTOValidator.class})
 public @interface ValidResponseDTO {
 
   String message() default "Please provide either 'data' or 'error' (not both).";

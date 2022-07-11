@@ -1,27 +1,15 @@
 package com.mttbrt.digres.api;
 
-import static com.mttbrt.digres.utils.StaticVariables.USERS_ENDPOINT;
-
 import com.mttbrt.digres.dto.request.AddUserReqDTO;
 import com.mttbrt.digres.dto.request.UpdateUserReqDTO;
+import com.mttbrt.digres.dto.response.BasicResDTO;
 import com.mttbrt.digres.dto.response.ResponseDTO;
+import com.mttbrt.digres.exception.FoundException;
+import com.mttbrt.digres.exception.NotFoundException;
 import com.mttbrt.digres.service.UserService;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import org.hibernate.internal.util.ZonedDateTimeComparator;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,53 +38,35 @@ public class UsersController {
         .body(response);
   }
 
-  // TODO: add lastModified to all methods below, getUserById, check response content when an error occurs.
-
   @GetMapping("/{userId}")
-  public ResponseEntity<?> getUser(@PathVariable String userId) {
-    ResponseDTO response = userService.getUserByUsername(userId);
-    if (response.getError() != null) {
-      return ResponseEntity.badRequest().body(response);
-    } else if (response.getData() != null) {
-      return ResponseEntity.ok()
-          .lastModified(response.getModified())
-          .body(response);
-    }
-    return ResponseEntity.internalServerError().build();
+  public ResponseEntity<?> getUser(@PathVariable long userId) throws NotFoundException {
+    ResponseDTO response = userService.getUser(userId);
+    return ResponseEntity.ok()
+        .lastModified(response.getModified())
+        .body(response);
   }
 
   @PostMapping()
-  public ResponseEntity<?> addUser(@Valid @RequestBody AddUserReqDTO request) {
-    ResponseDTO response = userService.addUser(request);
-    if (response.getError() != null) {
-      return ResponseEntity.badRequest().body(response);
-    } else if (response.getData() != null) {
-      return ResponseEntity.created(URI.create(USERS_ENDPOINT + '/' + request.getUsername())).body(response);
-    }
-    return ResponseEntity.internalServerError().build();
+  public ResponseEntity<?> addUser(@Valid @RequestBody AddUserReqDTO request)
+      throws FoundException {
+    BasicResDTO response = userService.addUser(request);
+    return ResponseEntity.created(response.getLocation())
+        .lastModified(response.getModified()).body(null);
   }
 
-  @PutMapping("/{username}")
-  public ResponseEntity<?> updateUser(@PathVariable String username,
-      @Valid @RequestBody UpdateUserReqDTO request) {
-    ResponseDTO response = userService.updateUser(username, request);
-    if (response.getError() != null) {
-      return ResponseEntity.badRequest().body(response);
-    } else if (response.getData() != null) {
-      return ResponseEntity.ok().body(response);
-    }
-    return ResponseEntity.internalServerError().build();
+  @PutMapping("/{userId}")
+  public ResponseEntity<?> updateUser(@PathVariable long userId,
+      @Valid @RequestBody UpdateUserReqDTO request) throws NotFoundException {
+    BasicResDTO response = userService.updateUser(userId, request);
+    return ResponseEntity.ok()
+        .lastModified(response.getModified())
+        .body(null);
   }
 
-  @DeleteMapping("/{username}")
-  public ResponseEntity<?> deleteUser(@PathVariable String username) {
-    ResponseDTO response = userService.deleteUser(username);
-    if (response.getError() != null) {
-      return ResponseEntity.badRequest().body(response);
-    } else if (response.getData() != null) {
-      return ResponseEntity.ok().body(response);
-    }
-    return ResponseEntity.internalServerError().build();
+  @DeleteMapping("/{userId}")
+  public ResponseEntity<?> deleteUser(@PathVariable long userId) throws NotFoundException {
+    userService.deleteUser(userId);
+    return ResponseEntity.ok().body(null);
   }
 
 }

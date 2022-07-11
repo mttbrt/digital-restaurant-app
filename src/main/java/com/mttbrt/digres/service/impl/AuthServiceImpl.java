@@ -1,11 +1,8 @@
 package com.mttbrt.digres.service.impl;
 
-import com.mttbrt.digres.repository.AuthorityDao;
-import com.mttbrt.digres.repository.UserDao;
 import com.mttbrt.digres.service.AuthService;
 import com.mttbrt.digres.utils.JWTHelper;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service

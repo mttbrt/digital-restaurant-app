@@ -26,7 +26,7 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Integer id;
+  private Long id;
 
   @Column(name = "username", nullable = false, length = 100)
   private String username;
@@ -35,7 +35,7 @@ public class User {
   private String password;
 
   @Column(name = "modified", nullable = false)
-  private OffsetDateTime modified;
+  private OffsetDateTime modified = OffsetDateTime.now();
 
   @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "takenBy")
@@ -60,14 +60,13 @@ public class User {
   }
 
   public User() {
-
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

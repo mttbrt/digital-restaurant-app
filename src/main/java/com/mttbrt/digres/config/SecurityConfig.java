@@ -1,18 +1,15 @@
 package com.mttbrt.digres.config;
 
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
-import static com.mttbrt.digres.utils.StaticVariables.LOGOUT_ENDPOINT;
 
+import com.mttbrt.digres.auth.AuthEntryPointJwt;
 import com.mttbrt.digres.config.filter.JWTAuthenticationFilter;
 import com.mttbrt.digres.config.filter.JWTLoginFilter;
-import com.mttbrt.digres.auth.AuthEntryPointJwt;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,21 +46,21 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .cors()
-      .and()
+        .and()
         .csrf()
         .ignoringAntMatchers(LOGIN_ENDPOINT)
         .csrfTokenRepository(getCsrfTokenRepository())
-      .and()
+        .and()
         .exceptionHandling()
         .authenticationEntryPoint(authEntryPointJwt)
-      .and()
+        .and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
+        .and()
         .authorizeRequests()
         .anyRequest()
         .authenticated()
-      .and()
+        .and()
         .addFilterAfter(jwtLoginFilter(), ExceptionTranslationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter(), ExceptionTranslationFilter.class);
 

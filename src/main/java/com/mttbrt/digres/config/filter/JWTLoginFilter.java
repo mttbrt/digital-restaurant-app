@@ -1,6 +1,5 @@
 package com.mttbrt.digres.config.filter;
 
-import static com.mttbrt.digres.utils.StaticVariables.AUTH_NAMESPACE;
 import static com.mttbrt.digres.utils.StaticVariables.LOGIN_ENDPOINT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
